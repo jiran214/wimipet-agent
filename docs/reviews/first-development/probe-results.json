@@ -1,0 +1,66 @@
+{
+  "B_to_A_direct": "角色包 C:\\Users\\jiran\\.codex\\worktrees\\a8f1\\wimipet-agent\\modules\\character-studio\\fixtures\\sample.character.json: 'schema'",
+  "B_to_A_explicit_sample_conversion": "loaded and ticked; feet-only assumed",
+  "D_image_only_to_C": "请输入 1–4000 字的内容",
+  "C_feedback_queued": "未知动作反馈",
+  "C_feedback_interrupted": "未知动作反馈",
+  "C_feedback_failed": "未知动作反馈",
+  "C_to_A_sample_action_results": [
+    {
+      "protocol": "A-world/1",
+      "sequence": 7,
+      "timeMs": 0.0,
+      "source": "simulation",
+      "type": "action-result",
+      "petId": "spark",
+      "requestId": "1e88ce1d6e134bc399dda60f4f6d60d6",
+      "status": "accepted",
+      "reason": ""
+    },
+    {
+      "protocol": "A-world/1",
+      "sequence": 8,
+      "timeMs": 0.0,
+      "source": "simulation",
+      "type": "action-result",
+      "petId": "orbit",
+      "requestId": "dfefaf4c67794485bb3920cd0b911514",
+      "status": "rejected",
+      "reason": "未知动作"
+    },
+    {
+      "protocol": "A-world/1",
+      "sequence": 9,
+      "timeMs": 0.0,
+      "source": "simulation",
+      "type": "action-result",
+      "petId": "moss",
+      "requestId": "f015a435a13e491e81e2692017ff4f89",
+      "status": "rejected",
+      "reason": "未知动作"
+    },
+    {
+      "protocol": "A-world/1",
+      "sequence": 11,
+      "timeMs": 800.0,
+      "source": "simulation",
+      "type": "action-result",
+      "petId": "spark",
+      "requestId": "1e88ce1d6e134bc399dda60f4f6d60d6",
+      "status": "completed",
+      "reason": ""
+    }
+  ],
+  "C_to_A_to_C_mapped_feedback": [
+    "completed",
+    "rejected",
+    "rejected"
+  ],
+  "C_to_D_bubbles": {
+    "direct": 0,
+    "adapted": 3
+  },
+  "assembly_code_present": [
+    "apps\\desktop\\AGENTS.md"
+  ]
+}
