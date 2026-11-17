@@ -31,13 +31,13 @@ python -m pip install -r requirements.txt
 
 ```dotenv
 OPENAI_BASE_URL=https://token-plan-cn.xiaomimimo.com/v1
-OPENAI_API_KEY=在这里填写自己的密钥
+MIMO_API_KEY=在这里填写自己的密钥
 OPENAI_MODEL=mimo-v2.6-pro
 ```
 
 保存后双击 **start.cmd**。真实模式会把当前角色可见的聊天及你主动分享的图片发送给配置的模型服务。密钥仅保存在本地，不进入 Git 提交；环境变量优先于 `.env`，`.env` 优先于 `.env.default`。修改后需重新启动。
 
-本次提供的服务配置实测返回 **401（认证失败）**。因此真实服务的对话效果尚未验收；需要有效且有对应权限的密钥。离线模式仍可体验完整操作流程。真实模型失败会显示处理失败，不会偷偷切换成固定回复。
+已验证小米 Token Plan 的 `mimo-v2.6-pro` 请求返回 HTTP 200。小米配置使用专属的 `MIMO_API_KEY`，优先于通用 `OPENAI_API_KEY`，避免电脑已有的其他服务密钥覆盖它。Token Plan 的 `tp-` 密钥需配专属地址，不能配普通按量 API 地址。真实模型失败会显示处理失败，不会偷偷切换成固定回复。
 
 ## 这一版的范围
 
