@@ -26,7 +26,9 @@
 
 ## 当前阶段
 
-仅有设计与协作规则，尚无实现、可执行入口和测试命令。下列要求约束后续实现，不代表当前能力已经完成；不要提前锁定语言、框架、模型提供方或进程结构。
+已有 0.1.0 独立实现验证版：Python 标准库核心、Tk 体验场和 Windows 原生适配器。启动 `python modules/desktop-world/run.py`，规则测试 `python -m unittest discover -s modules/desktop-world/tests -v`。详见[启动说明](../../docs/desktop-world/README.md)、[临时接口与身体规则](../../docs/desktop-world/接口与身体规则.md)、[实际验证记录](../../docs/desktop-world/验证记录.md)。
+
+该技术选型是本模块当前原型选择，不锁定其他模块；B/C/D 正式协议尚待协商。自动检查已实施，人工观感和真实截图等原生验收尚未完成；不得将模拟演示或隐藏窗口检查表述为首版需求全部通过。
 
 ## 职责
 

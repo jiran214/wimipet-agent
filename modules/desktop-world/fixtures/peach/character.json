@@ -1,0 +1,231 @@
+{
+  "schema": "A-display/1",
+  "id": "sample-peach",
+  "version": "1.0.0",
+  "name": "桃桃",
+  "actions": {
+    "idle": {
+      "loop": true,
+      "priority": 0,
+      "states": [
+        "standing",
+        "lying",
+        "clinging",
+        "hanging",
+        "falling",
+        "dragging"
+      ],
+      "contactKind": "feet",
+      "frames": [
+        {
+          "file": "idle-0.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "idle-1.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "idle-2.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "idle-3.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            60
+          ]
+        }
+      ]
+    },
+    "wave": {
+      "loop": false,
+      "priority": 10,
+      "states": [
+        "standing"
+      ],
+      "contactKind": "feet",
+      "frames": [
+        {
+          "file": "wave-0.png",
+          "durationMs": 140,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "wave-1.png",
+          "durationMs": 140,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "wave-2.png",
+          "durationMs": 140,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "wave-3.png",
+          "durationMs": 140,
+          "contact": [
+            32,
+            60
+          ]
+        },
+        {
+          "file": "wave-4.png",
+          "durationMs": 140,
+          "contact": [
+            32,
+            60
+          ]
+        }
+      ]
+    },
+    "lying": {
+      "loop": true,
+      "priority": 0,
+      "states": [
+        "lying"
+      ],
+      "contactKind": "body",
+      "frames": [
+        {
+          "file": "lying-0.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            48
+          ]
+        },
+        {
+          "file": "lying-1.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            48
+          ]
+        },
+        {
+          "file": "lying-2.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            48
+          ]
+        },
+        {
+          "file": "lying-3.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            48
+          ]
+        }
+      ]
+    },
+    "hanging": {
+      "loop": true,
+      "priority": 0,
+      "states": [
+        "hanging"
+      ],
+      "contactKind": "top-grip",
+      "frames": [
+        {
+          "file": "hanging-0.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            6
+          ]
+        },
+        {
+          "file": "hanging-1.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            6
+          ]
+        },
+        {
+          "file": "hanging-2.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            6
+          ]
+        },
+        {
+          "file": "hanging-3.png",
+          "durationMs": 220,
+          "contact": [
+            32,
+            6
+          ]
+        }
+      ]
+    },
+    "clinging": {
+      "loop": true,
+      "priority": 0,
+      "states": [
+        "clinging"
+      ],
+      "contactKind": "side-grip",
+      "frames": [
+        {
+          "file": "clinging-0.png",
+          "durationMs": 220,
+          "contact": [
+            6,
+            32
+          ]
+        },
+        {
+          "file": "clinging-1.png",
+          "durationMs": 220,
+          "contact": [
+            6,
+            32
+          ]
+        },
+        {
+          "file": "clinging-2.png",
+          "durationMs": 220,
+          "contact": [
+            6,
+            32
+          ]
+        },
+        {
+          "file": "clinging-3.png",
+          "durationMs": 220,
+          "contact": [
+            6,
+            32
+          ]
+        }
+      ]
+    }
+  }
+}
