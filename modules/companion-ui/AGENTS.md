@@ -37,7 +37,7 @@
 
 ## 当前阶段
 
-已有模块内原生 JavaScript 核心界面、Node.js 独立体验台与无密钥测试。运行 `npm start --prefix modules/companion-ui`，测试 `npm test --prefix modules/companion-ui`；详见 [使用与验收](../../docs/companion-ui/使用与验收.md) 和 [接口草案](../../docs/companion-ui/接口草案.md)。该选型仅用于 D 当前实现，不锁定其他模块或正式宿主。真实 A/B/C、原生窗口与模型效果尚未联调验证。
+已有模块内原生 JavaScript 核心界面、Node.js 独立体验台与无密钥测试。运行 `npm start --prefix modules/companion-ui`，测试 `npm test --prefix modules/companion-ui`；详见 [使用与验收](../../docs/companion-ui/使用与验收.md) 和 [公开接入](../../docs/companion-ui/公开接入.md)。当前 0.2.0 按 [D0002](../../docs/PRD/D0002-wimipet-v1宿主边界迁移.md) 实现 wimipet/1 正式 facade 与本地消费验证，旧接口草案停用。该选型不锁定其他模块或正式宿主。真实 A/B/C、原生窗口与模型效果尚未联调验证。
 
 首轮复盘见 [复盘记录](../../docs/reviews/first-development/README.md)。根契约 wimipet/1 是唯一迁移基线，兼容性须由共同样例和真实消费者分别验证。
 

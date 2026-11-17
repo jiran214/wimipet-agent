@@ -1,18 +1,23 @@
 // 使用 playwright-cli run-code --filename tests/browser-check.js；不是 @playwright/test。
 async (page) => {
+  page.setDefaultTimeout(5000);
   const failures = [];
   const check = (ok, name) => { if (!ok) throw new Error(name); };
   page.on('pageerror', error => failures.push(error.message));
   page.on('console', message => { if (['warning', 'error'].includes(message.type())) failures.push(message.text()); });
   await page.setViewportSize({ width: 1440, height: 1080 });
-  await page.goto('http://127.0.0.1:4317');
+  const target = page.url();
+  check(/^http:\/\/127\.0\.0\.1:\d+/.test(target), '先打开本次临时端口');
+  await page.clock.install();
+  await page.goto(target);
+  await page.waitForFunction(() => [...document.querySelectorAll('.stage-role img')].length === 2 && [...document.querySelectorAll('.stage-role img')].every(image => image.complete && image.naturalWidth === 160));
   await page.getByRole('button', { name: '下一步', exact: true }).click();
   await page.getByRole('button', { name: '下一步', exact: true }).click();
   check(await page.locator('.bubble').count() > 0, '三角色气泡可见');
   await page.getByRole('button', { name: /展开对话/ }).click();
   check(await page.locator('.bubble').count() === 0, '面板开启时无重复气泡');
   check(await page.locator('.message').count() === 3, '历史消息保持单一来源');
-  await page.getByLabel('接收对象').selectOption('lin');
+  await page.getByLabel('接收对象').selectOption('instance-one');
   await page.getByLabel('参与方式').selectOption('story-event');
   await page.getByRole('textbox', { name: '消息或故事事件内容' }).fill('窗边来了一位新访客');
   await page.getByRole('button', { name: '添加自带 PNG 样例' }).click();
@@ -25,7 +30,7 @@ async (page) => {
   await page.getByRole('button', { name: '发送 ↗', exact: true }).click();
   await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('上游已受理'));
   check(await page.locator('.message').count() === 4, '成功仅新增一条消息');
-  check(await page.locator('.message').last().textContent().then(text => text.includes('故事事件') && text.includes('林间')), '事件语义与指定角色');
+  check(await page.locator('.message').last().textContent().then(text => text.includes('故事事件') && text.includes('苔苔 · 一')), '事件语义与指定角色');
   await page.getByRole('button', { name: '观察设置', exact: true }).click();
   await page.getByRole('button', { name: '暂停观察', exact: true }).click();
   check(await page.locator('.observation').textContent().then(text => text.includes('观察进行中')), '确认前显示旧设置');
@@ -38,8 +43,8 @@ async (page) => {
   await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('制作入口'));
   for (let i = 0; i < 4; i++) await page.getByRole('button', { name: '下一步', exact: true }).click();
   check(await page.locator('.message').count() === 8, '长消息边缘与角色移除后历史完整');
-  check(await page.locator('.role-list').textContent().then(text => !text.includes('余白')), '角色集合更新');
-  check(await page.locator('.history').textContent().then(text => text.includes('余白') && text.includes('这里是一条用于验证')), '历史保留离开角色与长正文');
+  check(await page.locator('.role-list').textContent().then(text => !text.includes('苔苔 · 二')), '角色集合更新');
+  check(await page.locator('.history').textContent().then(text => text.includes('苔苔 · 二') && text.includes('这里是一条用于验证')), '历史保留离开角色与长正文');
   await page.screenshot({ path: 'output/playwright/panel.png', fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), '390px 无横向溢出');
@@ -55,6 +60,32 @@ async (page) => {
   await page.locator('input[type=file]').setInputFiles('fixtures/sample.svg');
   await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('仅支持'));
   check(await page.locator('.attachment').count() === 1, '错误类型未污染已选附件');
+  // 图片无正文，原样提交，不添加假台词。
+  await page.getByRole('button', { name: '发送 ↗', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('上游已受理'));
+  await page.getByRole('button', { name: /展开对话/ }).click();
+  check(await page.locator('.message').last().locator('p').textContent() === '', '图片无正文未伪造文字');
+  check(await page.locator('.message').last().locator('img').count() === 1, '图片消息正常预览');
+  await page.evaluate(async () => {
+    const blob = await fetch('/fixtures/sample.png').then(response => response.blob());
+    const data = new DataTransfer();
+    data.items.add(new File([blob], 'one.png', { type: 'image/png' }));
+    data.items.add(new File([blob], 'two.png', { type: 'image/png' }));
+    document.querySelector('.composer').dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: data }));
+  });
+  await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('全部未添加'));
+  check(await page.locator('.attachment').count() === 0, '多图整批拒绝，不丢第二张');
+  await page.getByRole('textbox', { name: '消息或故事事件内容' }).fill('取消后仍在的草稿');
+  await page.getByRole('button', { name: '下次请求等待', exact: true }).click();
+  await page.getByRole('button', { name: '发送 ↗', exact: true }).click();
+  await page.getByRole('button', { name: '取消提交', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('cancelled'));
+  check(await page.locator('textarea').inputValue() === '取消后仍在的草稿', '取消保留草稿');
+  await page.getByRole('button', { name: '下次请求等待', exact: true }).click();
+  await page.getByRole('button', { name: '发送 ↗', exact: true }).click();
+  await page.clock.fastForward(10001);
+  await page.waitForFunction(() => document.querySelector('.notice').textContent.includes('timeout'));
+  check(await page.locator('textarea').inputValue() === '取消后仍在的草稿', '超时保留草稿');
   await page.getByRole('button', { name: '空场景', exact: true }).click();
   check(await page.locator('.role-list').textContent().then(text => text.includes('暂无')), '空角色状态');
   await page.getByRole('button', { name: '停止体验', exact: true }).click();
@@ -64,7 +95,7 @@ async (page) => {
   await page.getByRole('button', { name: '从头回放', exact: true }).click();
   await page.getByRole('button', { name: '暂停', exact: true }).click();
   const before = await page.locator('.unread').textContent();
-  await page.waitForTimeout(2600);
+  await page.clock.fastForward(2600);
   check(await page.locator('.unread').textContent() === before, '暂停后不再推进样例');
   await page.getByText('回调记录与复现反馈', { exact: true }).click();
   await page.getByLabel('预期结果').fill('固定场景可复现；sk-test-secret');
@@ -75,5 +106,5 @@ async (page) => {
   check(download.suggestedFilename() === 'companion-ui-feedback.json', '反馈导出');
   await download.saveAs('output/playwright/feedback.json');
   check(failures.length === 0, `浏览器日志应无错误：${failures.join(', ')}`);
-  return { result: '通过', viewport: ['1440x1080', '390x844'], checks: ['单源切换', '三角色', '事件与定向发送', '图片输入与拖入', '失败重试', '观察确认与失败', '历史长消息与角色移除', '制作回调', '空状态', '停止恢复', '播放暂停', '反馈导出', '控制台无错误'] };
+  return { result: '通过', viewport: ['1440x1080', '390x844'], checks: ['单源切换', '三角色', '事件与定向发送', '图片输入与拖入', '失败重试', '观察确认与失败', '历史长消息与角色移除', '制作回调', '空状态', '停止恢复', '播放暂停', '图片无正文', '多图原子拒绝', '取消与超时保留', '反馈导出', '控制台无错误'] };
 }
