@@ -1,0 +1,380 @@
+{
+  "protocol": "wimipet/1",
+  "packageId": "sample-peach",
+  "revision": 1,
+  "character": {
+    "name": "桃桃",
+    "persona": "本地固定身体样例",
+    "appearance": "自绘像素角色"
+  },
+  "assets": {
+    "idle-0.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABPklEQVR4nO2XUQ7CIBBEexzvoVf0Et7NM2j4wDSmFoHdnQFmEtIfu8x7wabdNkVRLPJ83F8z7lVMKvO9ZtiruZBXsci9KEvRCTgrZF0sci/KUnQC/ilkVSxyL8pSEiABkwso/WYaATX37O+lE9ACErmWlhACLwESIAESgAaFC2CUEArPKGD5ExAqAA0Kl4CGhApAA8IloOEkACmgpsTldjUDapkFFZAK52UB3zJLAlAC9oV7JfTMgglY/gRMK6CleC987yy4BOQyh5cACbAXYPmcGEqA5bvCcAKO4D0kuAjwlDAEvJWAvQjroz+UAK/lKoBdgju8BBBLCIOXAEIJ4fBMEmDwDBLQ7J8sDZ+zNHzO0vAp6f0+Xb3A83x4zj5rLT53W+bTgteIsJhPK+Jozq//NC14Kd5FaEAVZY68AWunPpzL0Y0NAAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "idle-1.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABN0lEQVR4nO2X7Q3CMAxEOw57wIoswW7MAApSpYD6QR3bd03upPyj9r2nVijTpCiK4pDn4/7qcdduSpnf08Muc6GoYpm7KEvRCdgq5F0scxdlKToB/xTyKpa5i7KUBEiABPQtYO83dAKOFKqLWZ6z7qKU0A28BEiABEgAGhQugFFCKrwEEApIlYAGhUtAQ0IFoAHhEtBwEoAUcKTE5XZ1A7LMggoohefjAW+ZJQEoAXXhVgkts2AChn8DuhVgKd4K3zoLLgF53OElIECA52dyKgGef5WnE7AEHyGBVsCp3wBPCbMIb/BQeG8BUUcCooMGhMJLALGENHhGCenwTBJg8BJAIAHN/pVhwesMDV8Seccvp8xHM36yda31uO5a5tOCHxHhMZ9WxNKctW+aFnwv0UVoQBWlj7wBoKSs0yyoRmEAAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "idle-2.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABPklEQVR4nO2XUQ7CIBBEexzvoVf0Et7NM2j4wDSmFoHdnQFmEtIfu8x7wabdNkVRLPJ83F8z7lVMKvO9ZtiruZBXsci9KEvRCTgrZF0sci/KUnQC/ilkVSxyL8pSEiABkwso/WYaATX37O+lE9ACErmWlhACLwESIAESgAaFC2CUEArPKGD5ExAqAA0Kl4CGhApAA8IloOEkACmgpsTldjUDapkFFZAK52UB3zJLAlAC9oV7JfTMgglY/gRMK6CleC987yy4BOQyh5cACbAXYPmcGEqA5bvCcAKO4D0kuAjwlDAEvJWAvQjroz+UAK/lKoBdgju8BBBLCIOXAEIJ4fBMEmDwDBLQ7J8sDZ+zNHzO0vAp6f0+Xb3A83x4zj5rLT53W+bTgteIsJhPK+Jozq//NC14Kd5FaEAVZY68AWunPpzL0Y0NAAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "idle-3.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABLElEQVR4nO2X0Q3CMAxEOw57wIoswW7MAAoSUqlK07q275LcSfmj9r2nAso0KYqiOOT5uL963FVNKbM8PewyF4oqlrmLshSdgK1C3sUyd1GWohOwp5BXscxdlKUkQAIkoG8Btc/QCThSaF7M8px1F6WEbuAlQAIkQALQoHABjBJS4SWAUECqBDQoXAIaEioADQiXgIaTAKQANBhcAhqqKQGX29UNxjILJqCUXZ4z4NZZMAHDvwEsZ2h4SYiAl4AAAZ4/lE0J8PyrbE7AGnyEBFoBTb8BnhK+IrzBQ+G9BUQdCYgOGhAKLwHEEtLgGSWkwzNJgMFLAIEENPtPhgWfZ2j4ksg7fjllPprxk61rrcd11zKfFvyICI/5tCLW5vz7TtOC1xJdhAZUUfrIG8z60ItADao0AAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "wave-0.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABUElEQVR4nO2XUQ7CIBBEexzvoVf0Et7NM2j4wBCjbYHZnQF2EuJPu8x7oWq3LRKJIPJ83F8z7nWYVOZ7zbBXcyGrYp57SZaSE7BXCF3Mcy/JUnICzhRCFfPcS7JUCAgBkws4umYaATX3lPfKCWgB8VxLS3CBH0WAqRA26J4Al5PBBqU/HmwYugQ2CF1ASAgBiwtgQ4QApgR2efoJYAOEAKaAmo0utyusNHKWi4BUOC8EPGpWF3wIOCmgLNxbHDmrG/6sAMUTAIEfUQAMvAa+LN4L3zsLKqBFAnPB4UNACMALQH5PDCUA+fs+nIBf8BYSTARYShgCHiWgFIE++kMJsFqmAtQlmMOHAGEJbvAhQFCCO7ySBBq8ggQ2+ydLw+csDZ+zNHxK+n+fPq3A83x69l5rEa+7LfNlwWtEIObLivg1598zLQt+FOsiMqCRyBx5A6TEt6jBnWN4AAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "wave-1.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABO0lEQVR4nO2X0Q3CMAxEOw57wIoswW7MAApSpYJKA845vsR3Uv6Qfe8pEeqyKIqiAHK/XR8z7qqmlPk8M+wyF/Iq1nMXZSk6AUeF0MV67qIsRSfgl0KoYj13UZay7nIVwiygy81gFdDteYwoACoBubT2GzoB1sVIkCElsBwJkIDkAiASogF0A6IFjCxBAjILSA2fXoDgMwlYe0LBRxMQDn+6nGFAllmhAkrh9SDgLbMkIErAtnCrhJZZYQLS34BpBViKt8K3zgqXEHng8BLgIAD5TIYSgPyrHE7AHryHBFoBQ98ApIRVBBrcFR4twOtIgHeiAUPhJYBYQjd4Rgnd4ZkkhMFLAIGEaPa3pAXfJjV8iec3fjllfjTjK0eftYjPXct8WvB/RCDm04rYm/PtTdOC1+JdhAZUUebIE2XRYh+H2pbUAAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "wave-2.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABSklEQVR4nO2Xyw3CMBBEUw59QIs0QW/UAPLBKIrywfbsztqekSwuaHfeS0DJsiiKgsj79fyMuOsyqcz2jLCrupBVsdJdLnIiCnC7S84KoRf/u8vzgoQT4NmnqJDnLgnwkiABEoBbePWdYQTUlkULaJZgUcjzNF77/iVIgARMLAACLwGdCoDBR5Vw1gsOH1HAFtQMvBcB08G7SmBDUgWwAekS2HASwBRQUuL2uMOAamZRBaTC+SDga2ZJAEvAunCrhJZZNAHT3wHDCqgp3grfOosugXng8BIgAXgByP+JrgQgnxW6E7AHbyHBRIClhC7gUQLWItC3flcCrI6pgOgSzOElILAEN3gJCCjBHT6SBBp8BAls9l+mhs+ZGj5naviU9HyfPq3A83x6zl5rEa+7NfPDgpeIQMwPK2JvztFvOiz4VayLhAFVlDHyBXhy+i+6d0eeAAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "wave-3.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABM0lEQVR4nO2X0Q3CMBBDOw57wIoswW7MAAoSUqlK06a+2ElsKX/04vdIQZkmx3EcQJ6P+6vHvbJJZZarh72KC0UVq7mXZCk5AVuF0MVq7iVZSk7AnkKoYjX3kixlARZgAX0LyH1GTsCRQvNiJc+V7iUpoTZ8qAw26NGTNoyAaq8GG4YugQ1iAZZgARZAFcCGoEtgAxjeAiyAI4Bd3t9+SwIutyusOGLWafi9AlLZ5ToDjpgFgd8rQOkEwMBLBLDX0PCWEAFvAQECkD+UTQlA/lU2J2ANPkKCrICmTwBSwlcEGjwUHi0gallAdNiAVHgLEJZQDV5RQnV4JQk0eAsQkMBm/8mw4PMMDZ8SecdPK81nM36yda1FXHdL5suCHxGBmC8rYm3Ov3daFjyX6CIyoI7TR96t9lZSxgaMiAAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "wave-4.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABRElEQVR4nO2X0Q3CMAxEOw57wIoswW7MAMpHUIVKS5yzfWnupIgfZN97SlFZFkVREHk+7q8z7jpMKfN9zrDLXMirWOQuylJ0AvYKoYtF7qIsRSfgn0KoYpG7KEtJgHGXqxBmASE3Ayng6Dstu8IeD8tia2mUAJgEZKHoAxEgCRIgARKQDZEuIRsg/QaMLEECJEDwEiD42QTA4EcRUHtCwVvhL7crDMgyCw7fIqAUrgcBb5klAVkC1oV7JfTMShMw/Q04rQBL8V743lnpEjIPHF4CJAAvAPk7MZQA5LvCcAK24D0kuAjwlDAEPErAWgT66g8lwOu4CmCX4A4vAcQSwuAlgFBCODyThDR4BgnZ7J9MDV8zNXzN1PAl5f2+fHqB1/np2ftbi/i7a5lPC94iAjGfVsTWnF/PNC34UbyL0IAqyjnyBtri6lgWErhCAAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "lying-0.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAA/UlEQVR4nO2Wyw2DMBAFKSd9JC2mifSWGhJx4ILA9uLP2zUz0t5W2DPygWUBAAAAAAAAyPL9vH89dt2zyuynxW4IjoTOxCy7Ybh1gJTQXsyyGwYCdA7gPkrrADVz+wCSGCOl3MVQi7kIoZaSh1DLyEOoJeQR1ALSCOqLyyOoLy0NoL6wPELuY4/Xs/hgy26IAKvQNiXypbtuApQK5cQsu2EjTPkCcgE2sdKDPcg3DxBxTAFmi2CWJ8BEES7LzxChWj5yhGby0UJ0EY8QYoj4WYiRPzv7s4YKH/3f56ZG1Dru5K9GqDnLXYTU91JP2J18ipGHS0UBAAAAAABgAv6PgWe3ZMPKBwAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "lying-1.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAA/UlEQVR4nO2Wyw2DMBAFKSd9JC2mifSWGhJx4ILA9uLP2zUz0t5W2DPygWUBAAAAAAAAyPL9vH89dt2zyuynxW4IjoTOxCy7Ybh1gJTQXsyyGwYCdA7gPkrrADVz+wCSGCOl3MVQi7kIoZaSh1DLyEOoJeQR1ALSCOqLyyOoLy0NoL6wPELuY4/Xs/hgy26IAKvQNiXypbtuApQK5cQsu2EjTPkCcgE2sdKDPcg3DxBxTAFmi2CWJ8BEES7LzxChWj5yhGby0UJ0EY8QYoj4WYiRPzv7s4YKH/3f56ZG1Dru5K9GqDnLXYTU91JP2J18ipGHS0UBAAAAAABgAv6PgWe3ZMPKBwAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "lying-2.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAA/UlEQVR4nO2Wyw2DMBAFKSd9JC2mifSWGhJx4ILA9uLP2zUz0t5W2DPygWUBAAAAAAAAyPL9vH89dt2zyuynxW4IjoTOxCy7Ybh1gJTQXsyyGwYCdA7gPkrrADVz+wCSGCOl3MVQi7kIoZaSh1DLyEOoJeQR1ALSCOqLyyOoLy0NoL6wPELuY4/Xs/hgy26IAKvQNiXypbtuApQK5cQsu2EjTPkCcgE2sdKDPcg3DxBxTAFmi2CWJ8BEES7LzxChWj5yhGby0UJ0EY8QYoj4WYiRPzv7s4YKH/3f56ZG1Dru5K9GqDnLXYTU91JP2J18ipGHS0UBAAAAAABgAv6PgWe3ZMPKBwAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "lying-3.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAA/UlEQVR4nO2Wyw2DMBAFKSd9JC2mifSWGhJx4ILA9uLP2zUz0t5W2DPygWUBAAAAAAAAyPL9vH89dt2zyuynxW4IjoTOxCy7Ybh1gJTQXsyyGwYCdA7gPkrrADVz+wCSGCOl3MVQi7kIoZaSh1DLyEOoJeQR1ALSCOqLyyOoLy0NoL6wPELuY4/Xs/hgy26IAKvQNiXypbtuApQK5cQsu2EjTPkCcgE2sdKDPcg3DxBxTAFmi2CWJ8BEES7LzxChWj5yhGby0UJ0EY8QYoj4WYiRPzv7s4YKH/3f56ZG1Dru5K9GqDnLXYTU91JP2J18ipGHS0UBAAAAAABgAv6PgWe3ZMPKBwAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "hanging-0.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABFklEQVR4nO2Z0Q3CMAxEOw570BVZgt2YoaiVIkUFRJykvkt8J/kDqcb3nvgqy6IoSo/c1vs2872P46Uz4r1uZXqU8r7XvUxLKe97l5Ua6V73UiPeK87r+djS7MfzzzPcKy7za0a+R1dIAiRgUgGW54YXULLTsutDbixkgW79Hip41ISW4AYvARIgARKAhpUAtAA2Ce7w4QWggeES0LASgBSABoVLsBQ6v721jnWfSkD+vr4W3rovASwCvv1rUwtv2acREP4XMK2AGoga+JZ9Ogmeczm8BEiABEgAGlIC0AJYJbjBS4AE8Elwh5cAIgkweAYJaPYj4QXsCQ2fEho+JTR8Smj4PGHB84SGPyck9L+EglUUvrwBmJIxCXprr1oAAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "hanging-1.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABFklEQVR4nO2Z0Q3CMAxEOw570BVZgt2YoaiVIkUFRJykvkt8J/kDqcb3nvgqy6IoSo/c1vs2872P46Uz4r1uZXqU8r7XvUxLKe97l5Ua6V73UiPeK87r+djS7MfzzzPcKy7za0a+R1dIAiRgUgGW54YXULLTsutDbixkgW79Hip41ISW4AYvARIgARKAhpUAtAA2Ce7w4QWggeES0LASgBSABoVLsBQ6v721jnWfSkD+vr4W3rovASwCvv1rUwtv2acREP4XMK2AGoga+JZ9Ogmeczm8BEiABEgAGlIC0AJYJbjBS4AE8Elwh5cAIgkweAYJaPYj4QXsCQ2fEho+JTR8Smj4PGHB84SGPyck9L+EglUUvrwBmJIxCXprr1oAAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "hanging-2.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABFklEQVR4nO2Z0Q3CMAxEOw570BVZgt2YoaiVIkUFRJykvkt8J/kDqcb3nvgqy6IoSo/c1vs2872P46Uz4r1uZXqU8r7XvUxLKe97l5Ua6V73UiPeK87r+djS7MfzzzPcKy7za0a+R1dIAiRgUgGW54YXULLTsutDbixkgW79Hip41ISW4AYvARIgARKAhpUAtAA2Ce7w4QWggeES0LASgBSABoVLsBQ6v721jnWfSkD+vr4W3rovASwCvv1rUwtv2acREP4XMK2AGoga+JZ9Ogmeczm8BEiABEgAGlIC0AJYJbjBS4AE8Elwh5cAIgkweAYJaPYj4QXsCQ2fEho+JTR8Smj4PGHB84SGPyck9L+EglUUvrwBmJIxCXprr1oAAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "hanging-3.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABFklEQVR4nO2Z0Q3CMAxEOw570BVZgt2YoaiVIkUFRJykvkt8J/kDqcb3nvgqy6IoSo/c1vs2872P46Uz4r1uZXqU8r7XvUxLKe97l5Ua6V73UiPeK87r+djS7MfzzzPcKy7za0a+R1dIAiRgUgGW54YXULLTsutDbixkgW79Hip41ISW4AYvARIgARKAhpUAtAA2Ce7w4QWggeES0LASgBSABoVLsBQ6v721jnWfSkD+vr4W3rovASwCvv1rUwtv2acREP4XMK2AGoga+JZ9Ogmeczm8BEiABEgAGlIC0AJYJbjBS4AE8Elwh5cAIgkweAYJaPYj4QXsCQ2fEho+JTR8Smj4PGHB84SGPyck9L+EglUUvrwBmJIxCXprr1oAAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "clinging-0.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABKklEQVR4nO2Y0Q3CMBBDGYc9YEWWYDdmAPWjqIqAkosTX2pbisRHq/g9rpHa08lxHAeQx/32PMIe1VlKlWvGPUL5VAxdcMQe8GKogiP2SF0urYB/irUWHLFHOBbQoVx57WEF1Nx7KAE9wKcQMGJJw1uCHwEL8CMwXML5eqHDDpGwgNYutgCIhAh4JhF0+GklIOHZEuQngC6BDd98FkRFfCsTldIis1nALzG1EJHJQExUFwGRf1FWQPR8QJ0rdAHyE2ABG5iR93UT0FKGtaQlwOEtwAIsIPUnMaiAWd8CmwVIvw5LfxBBwmeQID0BIXikhOnGHyWCDQ6D3xOz/mbDUgSUYQNT4TNJoMFnkMBmf0cafo00/Bpp+G1kwcvIgpeRBd+LDKjjOI6TKC/YUE9tAdxQ/AAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "clinging-1.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABKklEQVR4nO2Y0Q3CMBBDGYc9YEWWYDdmAPWjqIqAkosTX2pbisRHq/g9rpHa08lxHAeQx/32PMIe1VlKlWvGPUL5VAxdcMQe8GKogiP2SF0urYB/irUWHLFHOBbQoVx57WEF1Nx7KAE9wKcQMGJJw1uCHwEL8CMwXML5eqHDDpGwgNYutgCIhAh4JhF0+GklIOHZEuQngC6BDd98FkRFfCsTldIis1nALzG1EJHJQExUFwGRf1FWQPR8QJ0rdAHyE2ABG5iR93UT0FKGtaQlwOEtwAIsIPUnMaiAWd8CmwVIvw5LfxBBwmeQID0BIXikhOnGHyWCDQ6D3xOz/mbDUgSUYQNT4TNJoMFnkMBmf0cafo00/Bpp+G1kwcvIgpeRBd+LDKjjOI6TKC/YUE9tAdxQ/AAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "clinging-2.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABKklEQVR4nO2Y0Q3CMBBDGYc9YEWWYDdmAPWjqIqAkosTX2pbisRHq/g9rpHa08lxHAeQx/32PMIe1VlKlWvGPUL5VAxdcMQe8GKogiP2SF0urYB/irUWHLFHOBbQoVx57WEF1Nx7KAE9wKcQMGJJw1uCHwEL8CMwXML5eqHDDpGwgNYutgCIhAh4JhF0+GklIOHZEuQngC6BDd98FkRFfCsTldIis1nALzG1EJHJQExUFwGRf1FWQPR8QJ0rdAHyE2ABG5iR93UT0FKGtaQlwOEtwAIsIPUnMaiAWd8CmwVIvw5LfxBBwmeQID0BIXikhOnGHyWCDQ6D3xOz/mbDUgSUYQNT4TNJoMFnkMBmf0cafo00/Bpp+G1kwcvIgpeRBd+LDKjjOI6TKC/YUE9tAdxQ/AAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "clinging-3.png": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABKklEQVR4nO2Y0Q3CMBBDGYc9YEWWYDdmAPWjqIqAkosTX2pbisRHq/g9rpHa08lxHAeQx/32PMIe1VlKlWvGPUL5VAxdcMQe8GKogiP2SF0urYB/irUWHLFHOBbQoVx57WEF1Nx7KAE9wKcQMGJJw1uCHwEL8CMwXML5eqHDDpGwgNYutgCIhAh4JhF0+GklIOHZEuQngC6BDd98FkRFfCsTldIis1nALzG1EJHJQExUFwGRf1FWQPR8QJ0rdAHyE2ABG5iR93UT0FKGtaQlwOEtwAIsIPUnMaiAWd8CmwVIvw5LfxBBwmeQID0BIXikhOnGHyWCDQ6D3xOz/mbDUgSUYQNT4TNJoMFnkMBmf0cafo00/Bpp+G1kwcvIgpeRBd+LDKjjOI6TKC/YUE9tAdxQ/AAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    }
+  },
+  "actions": [
+    {
+      "actionId": "idle",
+      "name": "idle",
+      "meaning": "固定自绘样例 idle",
+      "motion": "in-place",
+      "loop": true,
+      "priority": 0,
+      "allowedStates": [
+        "standing",
+        "falling",
+        "dragging"
+      ],
+      "contactKind": "feet",
+      "frames": [
+        {
+          "assetId": "idle-0.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "idle-1.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "idle-2.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "idle-3.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "wave",
+      "name": "wave",
+      "meaning": "固定自绘样例 wave",
+      "motion": "in-place",
+      "loop": false,
+      "priority": 10,
+      "allowedStates": [
+        "standing"
+      ],
+      "contactKind": "feet",
+      "frames": [
+        {
+          "assetId": "wave-0.png",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave-1.png",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave-2.png",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave-3.png",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave-4.png",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "lying",
+      "name": "lying",
+      "meaning": "固定自绘样例 lying",
+      "motion": "in-place",
+      "loop": true,
+      "priority": 0,
+      "allowedStates": [
+        "lying"
+      ],
+      "contactKind": "body",
+      "frames": [
+        {
+          "assetId": "lying-0.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 48
+          }
+        },
+        {
+          "assetId": "lying-1.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 48
+          }
+        },
+        {
+          "assetId": "lying-2.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 48
+          }
+        },
+        {
+          "assetId": "lying-3.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 48
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "hanging",
+      "name": "hanging",
+      "meaning": "固定自绘样例 hanging",
+      "motion": "in-place",
+      "loop": true,
+      "priority": 0,
+      "allowedStates": [
+        "hanging"
+      ],
+      "contactKind": "top-grip",
+      "frames": [
+        {
+          "assetId": "hanging-0.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 6
+          }
+        },
+        {
+          "assetId": "hanging-1.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 6
+          }
+        },
+        {
+          "assetId": "hanging-2.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 6
+          }
+        },
+        {
+          "assetId": "hanging-3.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 32,
+            "y": 6
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "clinging",
+      "name": "clinging",
+      "meaning": "固定自绘样例 clinging",
+      "motion": "in-place",
+      "loop": true,
+      "priority": 0,
+      "allowedStates": [
+        "clinging"
+      ],
+      "contactKind": "side-grip",
+      "frames": [
+        {
+          "assetId": "clinging-0.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 6,
+            "y": 32
+          }
+        },
+        {
+          "assetId": "clinging-1.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 6,
+            "y": 32
+          }
+        },
+        {
+          "assetId": "clinging-2.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 6,
+            "y": 32
+          }
+        },
+        {
+          "assetId": "clinging-3.png",
+          "durationMs": 220,
+          "contact": {
+            "x": 6,
+            "y": 32
+          }
+        }
+      ]
+    }
+  ]
+}

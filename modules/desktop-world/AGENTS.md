@@ -35,7 +35,9 @@
 
 ## 当前阶段
 
-已有首轮独立实现保存在对应开发 worktree，尚未合并到本工作区；见 [首轮复盘](../../docs/reviews/first-development/README.md)。根契约 v1 为后续迁移目标，当前实现是否支持须单独验证，不因文档更新而宣称兼容。模块运行说明与验证记录以对应实现版本为准。
+已有 0.2.0 实现验证版：Python 标准库核心、Tk 体验场和 Windows 原生适配器。公开入口为 `desktop_world.api.DesktopWorldAPI`，统一 wimipet/1 包实际解码并推导姿态能力，旧格式不再默认接入。启动 `python modules/desktop-world/run.py`，规则测试 `python -m unittest discover -s modules/desktop-world/tests -v`。详见[启动说明](../../docs/desktop-world/README.md)、[接口与身体规则](../../docs/desktop-world/接口与身体规则.md)、[实际验证记录](../../docs/desktop-world/验证记录.md)。
+
+已同步共享规范提交 a24c406，按 [A0002](../../docs/PRD/A0002-统一协议与异步观察迁移.md) 实施迁移。35 项规则/facade 检查、程序化 GUI/Win32 及模拟模式实际界面操作已验证；共同包已由真实 A 加载，但 B 新版真导出、C/D 真消费者和跨进程宿主排除未联调。人工原生观感、穿透和真实截图效果尚未完成，不因自测通过宣称跨模块通过。
 
 ## 职责
 
