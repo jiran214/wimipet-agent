@@ -166,13 +166,13 @@ class PackageTests(unittest.TestCase):
             for change in ("missing", "schema", "escape", "contact"):
                 data = copy.deepcopy(raw)
                 if change == "schema":
-                    data["schema"] = "unknown"
+                    data["protocol"] = "unknown"
                 elif change == "escape":
-                    data["actions"]["idle"]["frames"][0]["file"] = "../escape.png"
+                    data["assets"]["idle-0.png"]["dataBase64"] = "../escape.png"
                 elif change == "contact":
-                    data["actions"]["idle"]["frames"][0]["contact"] = [-1, 0]
+                    data["actions"][0]["frames"][0]["contact"] = dict(x=-1, y=0)
                 elif change == "missing":
-                    data["actions"]["idle"]["frames"][0]["file"] = "missing.png"
+                    data["actions"][0]["frames"][0]["assetId"] = "missing.png"
                 manifest.write_text(json.dumps(data), encoding="utf-8")
                 with self.assertRaises(PackageError):
                     Package.load(manifest)
@@ -180,7 +180,7 @@ class PackageTests(unittest.TestCase):
     def test_all_bundled_packages(self):
         for key in ("moss", "sky", "peach"):
             package = Package.load(FIXTURE.parent.parent / key / "character.json")
-            self.assertEqual(package.version, "1.0.0")
+            self.assertEqual(package.revision, 1)
             self.assertEqual(len(package.actions["wave"].frames), 5)
 
 

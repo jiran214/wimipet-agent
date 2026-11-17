@@ -3,16 +3,21 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
+import hashlib
 import json
 import platform
 import time
+import uuid
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 
 from . import __version__
 from .model import World, Rect, Surface, Package
-from .capture import CaptureGate, png
+from .capture import png
+from .api import DesktopWorldAPI
+from .package_v1 import decode_png
 from .windows import WindowsDesktop
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,12 +26,16 @@ ROOT = Path(__file__).resolve().parents[2]
 class Playground:
     def __init__(self, root, native=False):
         self.root = root
-        self.root.title("A · 桌面体验场 0.1.0")
+        self.root.title(f"A · 桌面体验场 {__version__} · wimipet/1")
         self.root.geometry("1260x850")
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.native = None
         self.world = None
-        self.gate = None
+        self.api = None
+        self.policy_revision = 0
+        self.pending_photos = {}
+        self.public_events = []
+        self.sample_surfaces = ()
         self.photos = {}
         self.overlays = {}
         self.preview_windows = []
@@ -47,6 +56,10 @@ class Playground:
         self.queue = tk.BooleanVar(value=False)
         self.pause = tk.BooleanVar(value=False)
         self.exclude = tk.BooleanVar(value=False)
+        self.scope = tk.StringVar(value="desktop")
+        self.slow_capture = tk.BooleanVar(value=False)
+        self.sample_delay = 0
+        self.last_capture_request = None
         self.status = tk.StringVar(value="就绪")
         self.capture_vars = [tk.StringVar(value=str(v)) for v in (0, 0, 420, 260)]
         self._build()
@@ -69,22 +82,32 @@ class Playground:
         left.pack(side="left", fill="both", expand=True)
         self.banner = ttk.Label(left, text="", padding=6, wraplength=850)
         self.banner.pack(fill="x")
-        self.canvas = tk.Canvas(left, width=900, height=620, bg="#e6edf0", highlightthickness=0)
+        self.canvas = tk.Canvas(left, width=820, height=620, bg="#e6edf0", highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<ButtonPress-1>", self._canvas_down)
         self.canvas.bind("<B1-Motion>", self._canvas_move)
         self.canvas.bind("<ButtonRelease-1>", self._canvas_up)
         self.state_label = ttk.Label(left, text="", padding=7, wraplength=850)
         self.state_label.pack(fill="x")
-        right = ttk.Frame(body, padding=(12, 0, 0, 0), width=300)
-        right.pack(side="right", fill="y")
+        control_host = ttk.Frame(body)
+        control_host.pack(side="right", fill="y")
+        control_canvas = tk.Canvas(control_host, width=330, highlightthickness=0)
+        control_scroll = ttk.Scrollbar(control_host, orient="vertical", command=control_canvas.yview)
+        control_canvas.configure(yscrollcommand=control_scroll.set)
+        control_scroll.pack(side="right", fill="y")
+        control_canvas.pack(side="left", fill="both", expand=True)
+        right = ttk.Frame(control_canvas, padding=(12, 0, 5, 0))
+        controls_id = control_canvas.create_window(0, 0, window=right, anchor="nw")
+        right.bind("<Configure>", lambda e: control_canvas.configure(scrollregion=control_canvas.bbox("all")))
+        control_canvas.bind("<Configure>", lambda e: control_canvas.itemconfigure(controls_id, width=e.width))
         self._label(right, "角色 / 身体")
         self.pet_box = ttk.Combobox(right, textvariable=self.pet_choice, state="readonly", width=30)
         self.pet_box.pack(fill="x", pady=3)
         self._row(right, (("添加样例", self.add_sample), ("载入角色包", self.load_package), ("移除", self.remove_pet)))
         ttk.Label(right, text="动作（wave 为有限动作，其余循环）").pack(anchor="w", pady=(6, 0))
-        ttk.Combobox(right, textvariable=self.action_choice, values=("wave", "idle", "lying", "hanging", "clinging", "unknown"),
-                     state="readonly").pack(fill="x")
+        self.action_box = ttk.Combobox(right, textvariable=self.action_choice, state="readonly")
+        self.action_box.pack(fill="x")
+        self.pet_box.bind("<<ComboboxSelected>>", lambda e: self._refresh_choices())
         ttk.Checkbutton(right, text="当前动作后排队（最多 8 条）", variable=self.queue).pack(anchor="w")
         self._row(right, (("执行动作", self.action), ("释放 / 下落", self.release), ("任务栏停靠", self.dock)))
         self._label(right, "依附窗口")
@@ -98,6 +121,9 @@ class Playground:
                           ("关闭样例窗口", lambda: self.change_window("close"))))
         ttk.Button(right, text="新建 / 恢复样例窗口", command=self.restore_window).pack(fill="x", pady=3)
         self._label(right, "按范围采集（默认内存预览）")
+        scope_box = ttk.Combobox(right, textvariable=self.scope, values=("desktop", "active-window"), state="readonly")
+        scope_box.pack(fill="x")
+        scope_box.bind("<<ComboboxSelected>>", lambda e: self.capture_policy())
         coords = ttk.Frame(right)
         coords.pack(fill="x")
         for name, var in zip(("X", "Y", "宽", "高"), self.capture_vars):
@@ -106,10 +132,13 @@ class Playground:
             ttk.Label(cell, text=name).pack()
             ttk.Entry(cell, textvariable=var, width=6).pack()
         self._row(right, (("授权该范围", self.authorize), ("采集预览", self.capture)))
+        ttk.Checkbutton(right, text="模拟慢采集 1.5 秒（可同时拖动/暂停）", variable=self.slow_capture).pack(anchor="w")
+        ttk.Button(right, text="取消上次采集", command=self.cancel_capture).pack(fill="x")
         ttk.Checkbutton(right, text="暂停采集", variable=self.pause, command=self.capture_policy).pack(anchor="w")
         ttk.Checkbutton(right, text="排除授权区左上 80×80（相交即拒绝）", variable=self.exclude,
                         command=self.capture_policy).pack(anchor="w")
         self._label(right, "回放 / 反馈")
+        ttk.Button(right, text="加载共同 v1 包（仅 idle / wave）", command=self.load_common).pack(fill="x")
         self._row(right, (("恢复初始场景", self.reset), ("固定事件回放", self.start_replay)))
         ttk.Label(right, text="预期 / 实际 / 异常（手工填写）").pack(anchor="w")
         self.notes = tk.Text(right, height=3, width=34)
@@ -162,10 +191,8 @@ class Playground:
                 preview.destroy()
         self.preview_windows.clear()
         self._close_test()
-        if self.world:
-            self.world.dispose()
-        if self.gate:
-            self.gate.dispose()
+        if self.api:
+            self.api.close()
         if self.native:
             self.native.dispose()
         self.native = None
@@ -181,7 +208,22 @@ class Playground:
             bounds = Rect(0, 0, 900, 600)
         self.world = World(bounds, "windows" if self.native else "simulation")
         self.world.subscribe(self.event)
-        self.gate = CaptureGate(self.native.bounds() if self.native else bounds)
+        desktop = self.native
+        backend = (lambda rect, cancel: desktop.screenshot(rect)) if desktop else self._sample_worker
+        self.api = DesktopWorldAPI(self.world, decoder=self._decode_asset, capture_backend=backend,
+                                   resolve_scope=self._resolve_capture_scope,
+                                   display_info=desktop.display_info if desktop else None,
+                                   target_ready=desktop.target_ready if desktop else lambda target: True,
+                                   source="native" if desktop else "simulation")
+        self.api.subscribe(self._api_event)
+        self.authorized_rect = Rect(bounds.x, bounds.y, 420, 260)
+        self.api.authorize(self.authorized_rect)
+        self.policy_revision = 0
+        self.confirmed_policy = dict(paused=True, scope="desktop", excludedRegions=[])
+        self.scope.set("desktop")
+        self.slow_capture.set(False)
+        self.sample_delay = 0
+        self.last_capture_request = None
         self.pause.set(False)
         self.exclude.set(False)
         for var, value in zip(self.capture_vars, (bounds.x, bounds.y, 420, 260)):
@@ -193,9 +235,13 @@ class Playground:
         for _ in range(3):
             self.add_sample(record=False)
         self.restore_window()
+        if self.native:
+            self.root.update_idletasks()
+            self._register_host("A-panel", self.root)
+        self.capture_policy()
         self.record("reset", mode=self.mode.get(), scenario="three-pets-v1")
         self.last_time = time.monotonic()
-        self.tell("初始场景已恢复：3 只样例角色；没有删除或改写用户角色包")
+        self.tell(f"初始场景已恢复 · wimipet/1 · session={self.api.session_id[:8]} · 没有改写用户包")
 
     def _cache(self, package):
         # Tk 实际解码全部帧；损坏 PNG 在载入阶段隔离，而非播放时崩溃。
@@ -203,7 +249,8 @@ class Playground:
         for action in package.actions.values():
             for frame in action.frames:
                 if frame.path not in self.photos:
-                    loaded[frame.path] = tk.PhotoImage(file=str(frame.path), master=self.root)
+                    loaded[frame.path] = (tk.PhotoImage(data=base64.b64encode(frame.data), master=self.root) if frame.data
+                                          else tk.PhotoImage(file=str(frame.path), master=self.root))
         self.photos.update(loaded)
 
     def add_sample(self, record=True):
@@ -214,21 +261,51 @@ class Playground:
 
     def _add_package(self, path):
         try:
-            package = Package.load(path)
-            self._cache(package)
+            if path.stat().st_size > 32 * 1048576:
+                raise ValueError("包超过 32MiB")
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            self.pending_photos = {}
             self.next_id += 1
             pet_id = f"pet-{self.next_id}"
+            response = self._request("LoadCharacter", dict(instanceId=pet_id, package=raw))
+            if "error" in response:
+                raise ValueError(response["error"]["message"])
+            package = self.world.pets[pet_id].package
+            self.photos.update(self.pending_photos)
             b = self.world.bounds
-            self.world.add(pet_id, package, b.x + 100 + (len(self.world.pets) * 140) % max(140, int(b.width - 180)), b.bottom)
+            self.world.pets[pet_id].x = b.x + 100 + ((len(self.world.pets) - 1) * 180) % max(180, int(b.width - 180))
+            self.world.dock(pet_id)
             self.pet_choice.set(pet_id)
             self._refresh_choices()
             return pet_id
         except Exception as exc:
             self.tell(f"载入失败（其他角色继续运行）：{exc}")
             return None
+        finally:
+            self.pending_photos = {}
+
+    def _decode_asset(self, data):
+        dimensions = decode_png(data)
+        photo = tk.PhotoImage(data=base64.b64encode(data), master=self.root)
+        if (photo.width(), photo.height()) != dimensions:
+            raise ValueError("Tk 解码尺寸不一致")
+        key = Path("embedded") / (hashlib.sha256(data).hexdigest() + ".png")
+        self.pending_photos[key] = photo
+        return dimensions
+
+    def _request(self, kind, payload):
+        return self.api.request(dict(protocol="wimipet/1", sessionId=self.api.session_id,
+                                     requestId=str(uuid.uuid4()), expiresAtMs=time.time_ns() // 1000000 + 15000,
+                                     type=kind, payload=payload))
+
+    def load_common(self):
+        pet = self._add_package(ROOT / "fixtures" / "v1" / "character-package.json")
+        if pet:
+            self.record("load-common-v1", instanceId=pet, revision=1)
+            self.tell("共同包实际解码完成：仅 idle/wave；缺少趴、挂、贴资产，相关依附将明确拒绝")
 
     def load_package(self):
-        path = filedialog.askopenfilename(title="选择 A-display/1 character.json", filetypes=[("角色包清单", "*.json")])
+        path = filedialog.askopenfilename(title="选择 wimipet/1 JSON 角色包", filetypes=[("角色包清单", "*.json")])
         if path:
             pet_id = self._add_package(Path(path))
             self.record("load-package", success=pet_id is not None)  # 不导出用户路径。
@@ -242,7 +319,7 @@ class Playground:
 
     def remove_pet(self):
         if pet := self._pet():
-            self.world.remove(pet)
+            self._request("RemoveCharacter", dict(instanceId=pet))
             self.record("remove", petId=pet)
             self._refresh_choices()
             self._prune_cache()
@@ -253,14 +330,17 @@ class Playground:
 
     def action(self):
         if pet := self._pet():
-            request = f"ui-{self.world.sequence + 1}"
-            self.world.command(pet, self.action_choice.get(), request, self.queue.get())
-            self.record("action", petId=pet, action=self.action_choice.get(), requestId=request, enqueue=self.queue.get())
+            response = self._request("ActionCommand", dict(instanceId=pet, actionId=self.action_choice.get(), enqueue=self.queue.get()))
+            if "error" in response:
+                self.tell(response["error"]["message"])
+            self.record("action", instanceId=pet, actionId=self.action_choice.get(), requestId=response["requestId"], enqueue=self.queue.get())
 
     def attach(self, posture):
         if pet := self._pet():
             surface_id = self.surface_choice.get().split(" | ")[0]
-            self.world.attach(pet, surface_id, posture)
+            response = self._request("AttachCharacter", dict(instanceId=pet, surfaceId=surface_id, posture=posture))
+            if "error" in response:
+                self.tell(f'{response["error"]["code"]}: {response["error"]["message"]}')
             self.record("attach", petId=pet, surfaceId=surface_id, posture=posture)
 
     def release(self):
@@ -284,6 +364,7 @@ class Playground:
                 ttk.Label(self.test_window, text="这是本模块自己的真实 Windows 窗口。\n可以拖动标题栏、拉伸边缘、最小化或关闭。\n角色依附只更改角色，不会操作您的其他软件。", padding=24).pack(fill="both", expand=True)
                 self.test_window.protocol("WM_DELETE_WINDOW", self._close_test)
                 self.root.update_idletasks()
+                self._register_host("A-test-window", self.test_window)
             self._poll()
         else:
             self.world.set_surface(Surface("sample-window", Rect(260, 260, 420, 210), title="固定样例窗口 v1"))
@@ -293,6 +374,8 @@ class Playground:
 
     def _close_test(self):
         if self.test_window:
+            if self.native and self.api and not self.api._closed:
+                self._unregister_host("A-test-window")
             self.test_window.destroy()
             self.test_window = None
         if self.world and not self.world.disposed:
@@ -345,6 +428,11 @@ class Playground:
         self.surface_box["values"] = values
         selected = self.surface_choice.get().split(" | ")[0]
         self.surface_choice.set(next((v for v in values if v.split(" | ")[0] == selected), next(iter(values), "")))
+        pet = self.world.pets.get(self.pet_choice.get())
+        values = list(pet.package.actions) + ["unknown"] if pet else []
+        self.action_box["values"] = values
+        if self.action_choice.get() not in values:
+            self.action_choice.set("wave" if "wave" in values else next(iter(values), ""))
 
     def _poll(self):
         if not self.native:
@@ -441,6 +529,7 @@ class Playground:
 
     def _render_overlays(self):
         for key in set(self.overlays) - set(self.world.pets):
+            self._unregister_host(f"A-pet-{key}")
             self.overlays.pop(key)[0].destroy()
         for pet in list(self.world.pets.values()):
             try:
@@ -464,6 +553,7 @@ class Playground:
             self.overlays[pet.id] = [window, label, None]
             window.update_idletasks()
             self.native.configure_overlay(window)
+            self._register_host(f"A-pet-{pet.id}", window)
         overlay = self.overlays[pet.id]
         window, label, old_path = overlay
         photo = self.photos[pet.frame.path]
@@ -488,6 +578,7 @@ class Playground:
         self.world.fail_action(pet.id, pet.request_id, "宿主渲染失败")
         self.world.remove(pet.id)
         if pet.id in self.overlays:
+            self._unregister_host(f"A-pet-{pet.id}")
             self.overlays.pop(pet.id)[0].destroy()
         if self.drag and self.drag[0] == pet.id:
             self.drag = None
@@ -506,7 +597,9 @@ class Playground:
 
     def _destroy_overlays(self):
         self.drag = None
-        for window, _, _ in self.overlays.values():
+        for key, (window, _, _) in self.overlays.items():
+            if self.native and self.api and not self.api._closed:
+                self._unregister_host(f"A-pet-{key}")
             window.destroy()
         self.overlays.clear()
 
@@ -519,7 +612,8 @@ class Playground:
             bounds = self.native.bounds() if self.native else self.world.bounds
             if rect.width <= 0 or rect.height <= 0 or not bounds.contains(rect):
                 raise ValueError("授权范围必须在桌面内且宽高为正")
-            self.gate.configure(allowed=rect)
+            self.authorized_rect = rect
+            self.api.authorize(rect)
             self.capture_policy()
             self.record("authorize", rect=vars(rect))
             self.tell(f"已授权 {vars(rect)}；之后修改输入不会自动扩大授权")
@@ -527,15 +621,26 @@ class Playground:
             self.tell(f"授权失败：{exc}")
 
     def capture_policy(self):
-        r = self.gate.allowed
-        self.gate.configure(paused=self.pause.get(), excluded=(Rect(r.x, r.y, min(80, r.width), min(80, r.height)),) if self.exclude.get() else ())
-        self.record("capture-policy", paused=self.pause.get(), excluded=self.exclude.get())
-        self.tell(f"采集策略 epoch={self.gate.epoch} · 暂停={self.pause.get()} · 左上排除={self.exclude.get()}")
+        r = self.authorized_rect
+        revision = self.policy_revision + 1
+        policy = dict(policyRevision=revision, paused=self.pause.get(), scope=self.scope.get(), cooldownMs=0,
+                      excludedRegions=[vars(Rect(r.x, r.y, min(80, r.width), min(80, r.height)))] if self.exclude.get() else [])
+        result = self._request("ApplyObservationPolicy", policy)
+        if "error" in result:
+            self.tell(f"策略未生效：{result['error']['message']}")
+            self.pause.set(self.confirmed_policy["paused"])
+            self.scope.set(self.confirmed_policy["scope"])
+            self.exclude.set(bool(self.confirmed_policy["excludedRegions"]))
+            return
+        self.policy_revision = result["payload"]["policyRevision"]
+        self.confirmed_policy = result["payload"]
+        self.record("capture-policy", **result["payload"])
+        self.tell(f"A 已确认 policyRevision={self.policy_revision} · 暂停={self.pause.get()} · 左上排除={self.exclude.get()}")
 
     def _sample_capture(self, rect):
         # 明确的模拟画面：固定桌面和当前模拟窗口，不包含角色和面板。
         rgb = bytearray(bytes((230, 237, 240)) * (rect.width * rect.height))
-        for surface in self.world.surfaces.values():
+        for surface in self.sample_surfaces:
             if surface.minimized:
                 continue
             r = surface.rect
@@ -547,49 +652,88 @@ class Playground:
                     rgb[start:start + (right - left) * 3] = bytes(color) * (right - left)
         return png(rect.width, rect.height, rgb)
 
-    def _native_capture(self, rect):
-        if not self.native.bounds().contains(rect):
-            raise ValueError("屏幕范围已经改变，请重新授权有效范围")
-        visible = [self.root] + [value[0] for value in self.overlays.values() if value[0].state() != "withdrawn"]
-        visible += [w for w in self.preview_windows if w.winfo_exists() and w.state() != "withdrawn"]
-        if self.test_window and self.test_window.state() != "iconic":
-            visible.append(self.test_window)
-        try:
-            for window in visible:
-                window.withdraw()
-            self.root.update_idletasks()
-            self.native.dwm.DwmFlush()
-            return self.native.screenshot(rect)
-        finally:
-            for window in visible:
-                if window.winfo_exists():
-                    window.deiconify()
+    def _sample_worker(self, rect, cancel):
+        if cancel.wait(self.sample_delay):
+            return b""
+        return self._sample_capture(rect)
+
+    def _resolve_capture_scope(self, scope):
+        if scope == "desktop":
+            return self.authorized_rect
+        surface = next((s for s in self.world.surfaces.values() if s.active and not s.minimized), None)
+        if not self.native:
+            surface = self.world.surfaces.get("sample-window")
+        if not surface or surface.minimized:
+            from .package_v1 import ProtocolError
+            raise ProtocolError("unavailable", "采集时没有受支持的活动窗口")
+        return surface.rect
+
+    def _register_host(self, target, window):
+        self.native.register_host(target, window)
+        result = self._request("RegisterHostTarget", dict(targetId=target))
+        if "error" in result:
+            self.tell(f"原生排除未就绪：{target}；将拒绝采集")
+
+    def _unregister_host(self, target):
+        self.native.unregister_host(target)
+        self._request("UnregisterHostTarget", dict(targetId=target))
+
+    def _api_event(self, event):
+        self.public_events.append(event)
+        del self.public_events[:-500]
+        if event["type"] == "CaptureError":
+            self.tell(f"采集终结：{event['payload']['error']['code']} · {event['payload']['error']['message']}")
+        elif event["type"] == "Interaction" and event["payload"]["kind"] == "removed":
+            self._prune_cache()
+        elif event["type"] == "CaptureResult":
+            if event["sessionId"] != self.api.session_id:
+                return
+            self._preview(event["payload"])
+
+    def _preview(self, payload):
+        ref = payload["contentRef"]
+        photo = tk.PhotoImage(data=base64.b64encode(self.api.readResource(ref)), master=self.root)
+        window = tk.Toplevel(self.root)
+        window.title("真实桌面截图 · 仅内存" if self.native else "合成样例截图 · 未采集真实桌面")
+        ttk.Label(window, text=f"范围 {payload['rect']} · policyRevision={payload['policyRevision']} · 未保存文件", padding=8).pack()
+        label = ttk.Label(window, image=photo)
+        label.image = photo
+        label.pack()
+        self.preview_windows.append(window)
+        target = f"A-preview-{uuid.uuid4()}"
+        if self.native:
+            window.update_idletasks()
+            self._register_host(target, window)
+        self.api.releaseResource(ref)  # Tk 已取得独立像素；不永久积累资源桥数据。
+        def close_preview():
+            if self.native:
+                self._unregister_host(target)
+            self.preview_windows.remove(window)
+            window.destroy()
+        window.protocol("WM_DELETE_WINDOW", close_preview)
+        self.tell("异步采集完成；画面仅存在内存，反馈记录不含画面")
 
     def capture(self):
         try:
-            rect = self._rect()
-            request = f"capture-{len(self.steps) + 1}"
-            result = self.gate.capture(request, rect, self._native_capture if self.native else self._sample_capture)
-            self.record("capture", rect=vars(rect), status=result["status"], epoch=result["epoch"])
-            if result["stale"]:
-                self.tell("在途采集结果已过期，画面已丢弃")
-                return
-            photo = tk.PhotoImage(data=base64.b64encode(result["image"]), master=self.root)
-            window = tk.Toplevel(self.root)
-            window.title("真实桌面截图 · 仅内存" if self.native else "合成样例截图 · 未采集真实桌面")
-            ttk.Label(window, text=f"范围 {vars(rect)} · 未保存文件 · 关闭即释放预览引用", padding=8).pack()
-            label = ttk.Label(window, image=photo)
-            label.image = photo
-            label.pack()
-            self.preview_windows.append(window)
-            def close_preview():
-                self.preview_windows.remove(window)
-                window.destroy()
-            window.protocol("WM_DELETE_WINDOW", close_preview)
-            self.tell("采集完成；画面仅存在内存，反馈记录不含画面")
+            if self.native:
+                self._poll()  # active-window 在请求时解析，不沿用陈旧焦点。
+            self.sample_surfaces = tuple(copy.deepcopy(list(self.world.surfaces.values())))
+            self.sample_delay = 1.5 if self.slow_capture.get() else 0
+            result = self._request("CaptureRequest", dict(policyRevision=self.policy_revision, sceneId="three-pets-v2", scope=self.scope.get()))
+            self.last_capture_request = result["requestId"]
+            self.record("capture", requestId=result["requestId"], policyRevision=self.policy_revision, scope=self.scope.get(), result=result)
+            if "error" in result:
+                self.tell(f"采集拒绝：{result['error']['code']} · {result['error']['message']}")
+            else:
+                self.tell("采集已受理，身体与动画继续响应；等待异步画面或终结结果")
         except Exception as exc:
             self.record("capture-error", reason=str(exc))
             self.tell(f"采集拒绝 / 失败：{exc}")
+
+    def cancel_capture(self):
+        if self.last_capture_request:
+            self._request("CancelRequest", dict(requestId=self.last_capture_request))
+            self.record("cancel-capture", requestId=self.last_capture_request)
 
     def start_replay(self):
         # 只在模拟模式重放固定输入；不代替用户操作真实第三方窗口。
@@ -610,12 +754,13 @@ class Playground:
         path = filedialog.asksaveasfilename(title="保存复现记录（不包含画面）", defaultextension=".json", initialfile="desktop-world-feedback.json")
         if not path:
             return
-        data = dict(module="desktop-world", version=__version__, protocol="A-world/1", scenario="three-pets-v1",
+        data = dict(module="desktop-world", version=__version__, protocol="wimipet/1", sessionId=self.api.session_id, scenario="three-pets-v2",
                     environment=dict(system=platform.system(), release=platform.release(), python=platform.python_version(),
                                      tk=self.root.tk.call("info", "patchlevel"), mode=self.mode.get(),
                                      bounds=vars(self.world.bounds), capabilities=self.native.capabilities if self.native else {"simulated": True}),
-                    steps=self.steps, results=self.results, expected="见操作说明；请在 notes 中记录实际观察", notes=self.notes.get("1.0", "end").strip(),
-                    states=[self.world.snapshot(key) for key in self.world.pets], events=self.world.events)
+                    steps=self.steps, expected="见操作说明；请在 notes 中记录实际观察", notes=self.notes.get("1.0", "end").strip(),
+                    positions=self.api.getPositions(), events=self.public_events,
+                    internalDiagnostics=dict(states=[self.world.snapshot(key) for key in self.world.pets], results=self.results))
         try:
             Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
             self.tell("复现记录已导出；未自动收集截图、密钥或窗口标题。手填文字由您控制。")
@@ -629,7 +774,7 @@ class Playground:
         delta = min((now - self.last_time) * 1000, 250)
         self.last_time = now
         try:
-            self.world.tick(delta)
+            self.api.tick(delta)
             if self.native and now - self.last_poll >= 0.1:
                 self._poll()
                 self.last_poll = now
@@ -651,8 +796,7 @@ class Playground:
         self.replay.clear()
         self._destroy_overlays()
         self._close_test()
-        self.gate.dispose()
-        self.world.dispose()
+        self.api.close()
         if self.native:
             self.native.dispose()
         self.photos.clear()

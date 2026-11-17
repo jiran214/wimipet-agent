@@ -1,5 +1,6 @@
 """可重复生成项目自绘的固定像素样例；不是模型生成或外部角色资产。"""
 import json
+import base64
 from pathlib import Path
 import struct
 import zlib
@@ -69,18 +70,21 @@ def main():
     for key, name, color in (("moss", "苔苔", (128, 183, 138)), ("sky", "云云", (133, 187, 220)), ("peach", "桃桃", (237, 170, 149))):
         folder = ROOT / key
         folder.mkdir(exist_ok=True)
-        actions = {}
+        actions = []
+        assets = {}
         for action in ("idle", "wave", "lying", "hanging", "clinging"):
             frames = []
             for index in range(5 if action == "wave" else 4):
                 data, contact = image(color, action, index)
                 filename = f"{action}-{index}.png"
                 (folder / filename).write_bytes(data)
-                frames.append(dict(file=filename, durationMs=140 if action == "wave" else 220, contact=contact))
-            states = ["standing", "lying", "clinging", "hanging", "falling", "dragging"] if action == "idle" else (["standing"] if action == "wave" else [action])
+                assets[filename] = dict(mime="image/png", dataBase64=base64.b64encode(data).decode("ascii"), width=64, height=64)
+                frames.append(dict(assetId=filename, durationMs=140 if action == "wave" else 220, contact=dict(x=contact[0], y=contact[1])))
+            states = ["standing", "falling", "dragging"] if action == "idle" else (["standing"] if action == "wave" else [action])
             contact_kind = {"lying": "body", "hanging": "top-grip", "clinging": "side-grip"}.get(action, "feet")
-            actions[action] = dict(loop=action != "wave", priority=10 if action == "wave" else 0, states=states, contactKind=contact_kind, frames=frames)
-        (folder / "character.json").write_text(json.dumps(dict(schema="A-display/1", id=f"sample-{key}", version="1.0.0", name=name, actions=actions), ensure_ascii=False, indent=2), encoding="utf-8")
+            actions.append(dict(actionId=action, name=action, meaning=f"固定自绘样例 {action}", motion="in-place", loop=action != "wave", priority=10 if action == "wave" else 0, allowedStates=states, contactKind=contact_kind, frames=frames))
+        (folder / "character.json").write_text(json.dumps(dict(protocol="wimipet/1", packageId=f"sample-{key}", revision=1,
+            character=dict(name=name, persona="本地固定身体样例", appearance="自绘像素角色"), assets=assets, actions=actions), ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wimipet-desktop-world"
-version = "0.1.0"
+version = "0.2.0"
 description = "桌面环境与角色身体独立体验场"
 requires-python = ">=3.11"
 dependencies = []

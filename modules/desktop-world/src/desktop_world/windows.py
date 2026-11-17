@@ -18,8 +18,10 @@ class WindowsDesktop:
         self.user = C.WinDLL("user32", use_last_error=True)
         self.gdi = C.WinDLL("gdi32", use_last_error=True)
         self.dwm = C.WinDLL("dwmapi")
+        self.shcore = C.WinDLL("shcore")
         self._ids = {}
         self._counter = 0
+        self._hosts = {}
         self._declare()
 
     def _declare(self):
@@ -45,6 +47,8 @@ class WindowsDesktop:
         u.ReleaseDC.argtypes = [W.HWND, W.HDC]
         u.SetWindowRgn.argtypes = [W.HWND, W.HANDLE, W.BOOL]
         u.SetWindowDisplayAffinity.argtypes = [W.HWND, W.DWORD]
+        u.GetWindowDisplayAffinity.argtypes = [W.HWND, C.POINTER(W.DWORD)]
+        u.IsWindow.argtypes = [W.HWND]
         u.SetWindowPos.argtypes = [W.HWND, W.HWND, C.c_int, C.c_int, C.c_int, C.c_int, W.UINT]
         g.CreateCompatibleDC.argtypes = [W.HDC]
         g.CreateCompatibleDC.restype = W.HDC
@@ -134,6 +138,46 @@ class WindowsDesktop:
         style = self.get_style(hwnd, -20)
         self.set_style(hwnd, -20, (style | 0x08000000 | 0x80) & ~0x40000)
 
+    def register_host(self, target_id, widget):
+        """平台内部将 widget 解析为句柄；公开 facade 只接收 targetId。"""
+        hwnd = self.user.GetAncestor(widget.winfo_id(), 2)
+        self.user.SetWindowDisplayAffinity(hwnd, 0x11)
+        self._hosts[target_id] = hwnd
+        return self.target_ready(target_id)
+
+    def register_external_host(self, target_id, resolver):
+        # 外部拥有者必须自行设置 WDA_EXCLUDEFROMCAPTURE，本适配器只核验。
+        self._hosts[target_id] = resolver()
+        return self.target_ready(target_id)
+
+    def target_ready(self, target_id):
+        hwnd = self._hosts.get(target_id)
+        if not hwnd or not self.user.IsWindow(hwnd):
+            return False
+        affinity = W.DWORD()
+        return bool(self.user.GetWindowDisplayAffinity(hwnd, C.byref(affinity)) and affinity.value == 0x11)
+
+    def unregister_host(self, target_id):
+        self._hosts.pop(target_id, None)
+
+    def display_info(self, x, y):
+        class MonitorInfo(C.Structure):
+            _fields_ = [("size", W.DWORD), ("monitor", W.RECT), ("work", W.RECT), ("flags", W.DWORD)]
+        self.user.MonitorFromPoint.argtypes = [W.POINT, W.DWORD]
+        self.user.MonitorFromPoint.restype = W.HANDLE
+        self.user.GetMonitorInfoW.argtypes = [W.HANDLE, C.POINTER(MonitorInfo)]
+        monitor = self.user.MonitorFromPoint(W.POINT(round(x), round(y)), 2)
+        info = MonitorInfo()
+        info.size = C.sizeof(info)
+        if not self.user.GetMonitorInfoW(monitor, C.byref(info)):
+            raise OSError("无法获取显示器坐标")
+        scale = C.c_int()
+        self.shcore.GetScaleFactorForMonitor.argtypes = [W.HANDLE, C.POINTER(C.c_int)]
+        if self.shcore.GetScaleFactorForMonitor(monitor, C.byref(scale)) != 0 or scale.value <= 0:
+            raise OSError("无法获取显示器缩放")
+        return dict(originX=info.monitor.left, originY=info.monitor.top,
+                    displayId=f"display-{info.monitor.left}-{info.monitor.top}", scaleFactor=scale.value / 100)
+
     def shape(self, widget, photo):
         """按 PNG 不透明像素构造窗口区域；透明区域根本不在窗口命中区域中。"""
         hwnd = self.user.GetAncestor(widget.winfo_id(), 2)
@@ -159,7 +203,9 @@ class WindowsDesktop:
                 self.gdi.DeleteObject(region)
 
     def screenshot(self, rect):
-        """调用方先隐藏自身窗口并 DwmFlush；不记录或保存画面。"""
+        """后台范围截图；调用方先核验已登记宿主的系统排除属性，不落盘。"""
+        if not self.bounds().contains(rect):
+            raise ValueError("采集范围已经离开当前桌面")
         screen = self.user.GetDC(None)
         if not screen:
             raise C.WinError(C.get_last_error())
@@ -205,3 +251,4 @@ class WindowsDesktop:
 
     def dispose(self):
         self._ids.clear()
+        self._hosts.clear()

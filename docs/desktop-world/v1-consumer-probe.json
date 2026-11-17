@@ -1,0 +1,209 @@
+{
+  "sha256": "d7d6d9b8d731f37aecc4e436c0d48b9aec0efe464d43aa396872f590f14f9eaf",
+  "handshake": {
+    "protocol": "wimipet/1",
+    "module": "A",
+    "implementationVersion": "0.2.0",
+    "capabilities": {
+      "characterPackage": true,
+      "actualPngDecode": true,
+      "multiInstance": true,
+      "actionLifecycle": true,
+      "positions": "desktop-physical-px",
+      "observationPolicy": true,
+      "asynchronousCapture": false,
+      "hostExclusionRegistration": true,
+      "attachmentPostures": [
+        "lying",
+        "clinging",
+        "hanging"
+      ],
+      "requestTypes": [
+        "LoadCharacter",
+        "RemoveCharacter",
+        "ActionCommand",
+        "AttachCharacter",
+        "ApplyObservationPolicy",
+        "CaptureRequest",
+        "RegisterHostTarget",
+        "UnregisterHostTarget",
+        "CancelRequest",
+        "ReleaseResource"
+      ],
+      "source": "simulation",
+      "icons": false,
+      "preciseOcclusion": false,
+      "nativeHost": false
+    },
+    "limits": {
+      "packageBytes": 33554432,
+      "assetBytes": 2097152,
+      "assets": 256,
+      "frameWidth": 512,
+      "frameHeight": 512,
+      "actions": 64,
+      "framesPerAction": 128,
+      "requestRecords": 1024,
+      "capturePixels": 8294400,
+      "resourceBytes": 33554432,
+      "captureWorkers": 2
+    },
+    "sessionId": "92251110-ac73-472d-9e59-f2f84cdad08f",
+    "sourceInstanceId": "1ee4c033-a476-436e-9ceb-0c22f011fd9b"
+  },
+  "loads": [
+    {
+      "protocol": "wimipet/1",
+      "sessionId": "92251110-ac73-472d-9e59-f2f84cdad08f",
+      "requestId": "bf783968-9eab-452d-b3a9-9310d44c72a1",
+      "expiresAtMs": 1794929876637,
+      "type": "CharacterLoaded",
+      "payload": {
+        "instanceId": "instance-one",
+        "packageId": "contract-sample-moss",
+        "revision": 1,
+        "supportedActions": [
+          {
+            "actionId": "idle",
+            "name": "轻轻呼吸",
+            "meaning": "安静陪伴、等待回应",
+            "allowedStates": [
+              "standing",
+              "falling",
+              "dragging"
+            ],
+            "loop": true,
+            "contactKind": "feet",
+            "priority": 0
+          },
+          {
+            "actionId": "wave",
+            "name": "挥手",
+            "meaning": "向用户或伙伴打招呼",
+            "allowedStates": [
+              "standing"
+            ],
+            "loop": false,
+            "contactKind": "feet",
+            "priority": 10
+          }
+        ],
+        "supportedPostures": []
+      }
+    },
+    {
+      "protocol": "wimipet/1",
+      "sessionId": "92251110-ac73-472d-9e59-f2f84cdad08f",
+      "requestId": "899112b1-427a-4e14-8aa5-2046df622c2e",
+      "expiresAtMs": 1794929876638,
+      "type": "CharacterLoaded",
+      "payload": {
+        "instanceId": "instance-two",
+        "packageId": "contract-sample-moss",
+        "revision": 1,
+        "supportedActions": [
+          {
+            "actionId": "idle",
+            "name": "轻轻呼吸",
+            "meaning": "安静陪伴、等待回应",
+            "allowedStates": [
+              "standing",
+              "falling",
+              "dragging"
+            ],
+            "loop": true,
+            "contactKind": "feet",
+            "priority": 0
+          },
+          {
+            "actionId": "wave",
+            "name": "挥手",
+            "meaning": "向用户或伙伴打招呼",
+            "allowedStates": [
+              "standing"
+            ],
+            "loop": false,
+            "contactKind": "feet",
+            "priority": 10
+          }
+        ],
+        "supportedPostures": []
+      }
+    }
+  ],
+  "wave": [
+    {
+      "protocol": "wimipet/1",
+      "sessionId": "92251110-ac73-472d-9e59-f2f84cdad08f",
+      "source": "A",
+      "sourceInstanceId": "1ee4c033-a476-436e-9ceb-0c22f011fd9b",
+      "sourceSeq": 3,
+      "atMs": 1794929816640,
+      "eventId": "1ee4c033-a476-436e-9ceb-0c22f011fd9b:3",
+      "requestId": "91dbce77-8739-4ecb-89f4-c492c66b2237",
+      "expiresAtMs": 1794929876640,
+      "type": "ActionResult",
+      "payload": {
+        "instanceId": "instance-two",
+        "status": "accepted"
+      }
+    },
+    {
+      "protocol": "wimipet/1",
+      "sessionId": "92251110-ac73-472d-9e59-f2f84cdad08f",
+      "source": "A",
+      "sourceInstanceId": "1ee4c033-a476-436e-9ceb-0c22f011fd9b",
+      "sourceSeq": 5,
+      "atMs": 1794929816640,
+      "eventId": "1ee4c033-a476-436e-9ceb-0c22f011fd9b:5",
+      "requestId": "91dbce77-8739-4ecb-89f4-c492c66b2237",
+      "expiresAtMs": 1794929876640,
+      "type": "ActionResult",
+      "payload": {
+        "instanceId": "instance-two",
+        "status": "completed"
+      }
+    }
+  ],
+  "positions": {
+    "protocol": "wimipet/1",
+    "sessionId": "92251110-ac73-472d-9e59-f2f84cdad08f",
+    "positions": [
+      {
+        "instanceId": "instance-one",
+        "x": 40.0,
+        "y": 482.4,
+        "width": 160,
+        "height": 160,
+        "anchor": {
+          "x": 80.0,
+          "y": 137.6
+        },
+        "coordinateSpace": "desktop-physical-px",
+        "visible": true,
+        "originX": 0,
+        "originY": 0,
+        "displayId": "simulation-primary",
+        "scaleFactor": 1
+      },
+      {
+        "instanceId": "instance-two",
+        "x": 270.0,
+        "y": 482.4,
+        "width": 160,
+        "height": 160,
+        "anchor": {
+          "x": 80.0,
+          "y": 137.6
+        },
+        "coordinateSpace": "desktop-physical-px",
+        "visible": true,
+        "originX": 0,
+        "originY": 0,
+        "displayId": "simulation-primary",
+        "scaleFactor": 1
+      }
+    ]
+  },
+  "evidence": "A 实际包消费者；不是 B 新导出或 A/B/C/D 全链路验收"
+}

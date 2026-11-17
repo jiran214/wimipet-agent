@@ -45,6 +45,7 @@ class Frame:
     contact: tuple[float, float]
     width: int
     height: int
+    data: bytes = b""
 
 
 @dataclass(frozen=True)
@@ -54,6 +55,8 @@ class Action:
     states: tuple[str, ...]
     priority: int
     contact_kind: str
+    meaning: str = ""
+    name: str = ""
 
 
 @dataclass(frozen=True)
@@ -62,12 +65,19 @@ class Package:
     version: str
     name: str
     actions: dict[str, Action]
+    revision: int = 1
+    character: dict = field(default_factory=dict)
 
     @classmethod
-    def load(cls, manifest: Path):
-        """原型 A-display/1；路径只允许包目录内部，源文件保持只读。"""
+    def load(cls, manifest: Path, *, allow_legacy=False):
+        """公开路径默认读取统一包；旧磁盘资产格式仅作显式历史适配。"""
         try:
+            if manifest.stat().st_size > 32 * 1048576:
+                raise ValueError("包超过 32MiB")
             raw = json.loads(manifest.read_text(encoding="utf-8"))
+            if raw.get("protocol") == "wimipet/1" or not allow_legacy:
+                from .package_v1 import load_package
+                return load_package(raw)
             if raw["schema"] != "A-display/1":
                 raise ValueError("不支持的角色包协议")
             if not all(isinstance(raw[k], str) and raw[k] for k in ("id", "version", "name")):
@@ -102,8 +112,8 @@ class Package:
                 if contact_kind not in ("feet", "body", "top-grip", "side-grip"):
                     raise ValueError("未知接触点类型")
                 actions[name] = Action(tuple(frames), spec["loop"], states, spec["priority"], contact_kind)
-            if "idle" not in actions or set(actions["idle"].states) != allowed or not actions["idle"].loop:
-                raise ValueError("必须提供覆盖所有身体状态的循环 idle")
+            if "idle" not in actions or not {"standing", "falling", "dragging"} <= set(actions["idle"].states) or not actions["idle"].loop:
+                raise ValueError("必须提供覆盖 standing/falling/dragging 的循环 idle")
             return cls(raw["id"], raw["version"], raw["name"], actions)
         except (KeyError, TypeError, ValueError, OSError, struct.error) as exc:
             raise PackageError(f"角色包 {manifest}: {exc}") from exc
@@ -205,7 +215,16 @@ class World:
         self.emit("action-result", petId=pet.id, requestId=request, status=status, reason=reason)
 
     def _idle(self, pet):
-        pet.action, pet.frame_index, pet.elapsed, pet.request_id = "idle", 0, 0, None
+        fallback = self.posture_action(pet.package, pet.state) or "idle"
+        pet.action, pet.frame_index, pet.elapsed, pet.request_id = fallback, 0, 0, None
+
+    @staticmethod
+    def posture_action(package, posture):
+        kind = {"lying": "body", "clinging": "side-grip", "hanging": "top-grip"}.get(posture)
+        if kind is None:
+            return None
+        return next((name for name, action in package.actions.items()
+                     if action.loop and posture in action.states and action.contact_kind == kind), None)
 
     def _interrupt(self, pet, reason):
         if pet.request_id:
@@ -250,6 +269,7 @@ class World:
         pet = self.pets[pet_id]
         self._interrupt(pet, "用户拖拽")
         pet.state, pet.attachment, pet.velocity, pet.visible = "dragging", None, 0, True
+        self._idle(pet)
         self.emit("drag-start", petId=pet_id)
 
     def fail_action(self, pet_id, request_id, reason):
@@ -262,6 +282,26 @@ class World:
         pet.request_id = None
         self._interrupt(pet, "前序动作播放失败")
         return True
+
+    def cancel_request(self, request_id, reason="请求已取消"):
+        self._live()
+        for pet in self.pets.values():
+            if pet.request_id == request_id:
+                self._result(pet, request_id, "interrupted", reason)
+                self._idle(pet)
+                self._next_queued(pet)
+                return True
+            for index, (queued_id, _) in enumerate(pet.queue):
+                if queued_id == request_id:
+                    pet.queue.pop(index)
+                    self._result(pet, request_id, "interrupted", reason)
+                    return True
+        return False
+
+    def _next_queued(self, pet):
+        while pet.queue and not pet.request_id:
+            request, action = pet.queue.pop(0)
+            self.command(pet.id, action, request)
 
     def drag_move(self, pet_id, x, y):
         self._live()
@@ -290,6 +330,7 @@ class World:
         pet = self.pets[pet_id]
         self._interrupt(pet, "任务栏停靠")
         pet.attachment, pet.state, pet.y, pet.velocity, pet.visible = None, "standing", self.bounds.bottom, 0, True
+        self._idle(pet)
         self._clamp(pet)
         self.emit("docked", **self.snapshot(pet_id))
 
@@ -297,8 +338,9 @@ class World:
         self._live()
         pet = self.pets[pet_id]
         surface = self.surfaces.get(surface_id)
-        if not surface or surface.minimized or posture not in ("lying", "hanging", "clinging"):
-            self.emit("attachment-rejected", petId=pet_id, reason="目标不可依附或姿态无效")
+        posture_action = self.posture_action(pet.package, posture)
+        if not surface or surface.minimized or not posture_action:
+            self.emit("attachment-rejected", petId=pet_id, reason="目标不可依附或角色缺少真实姿态资产")
             return False
         self._interrupt(pet, "改变接触关系")
         offset = max(32, min(pet.x - surface.rect.x, max(32, surface.rect.width - 32)))
@@ -306,7 +348,7 @@ class World:
         pet.state, pet.velocity = posture, 0
         self._contact(pet, surface)
         # 姿态演示资产也受状态规则验证；这里不伪造动作完成。
-        self.command(pet_id, posture, f"posture-{self.sequence + 1}")
+        self.command(pet_id, posture_action, f"posture-{self.sequence + 1}")
         self.emit("attached", **self.snapshot(pet_id))
         return True
 
@@ -357,6 +399,7 @@ class World:
         pet = self.pets[pet_id]
         self._interrupt(pet, reason)
         pet.attachment, pet.state, pet.velocity, pet.visible = None, "falling", 0, True
+        self._idle(pet)
         self._clamp(pet)
         self.emit("released", petId=pet_id, reason=reason)
 
@@ -386,15 +429,10 @@ class World:
                         pet.frame_index = 0
                     else:
                         request = pet.request_id
-                        queue = list(pet.queue)
-                        pet.queue.clear()
                         self._idle(pet)
                         if request:
                             self._result(pet, request, "completed")
-                        if queue:
-                            request, action = queue.pop(0)
-                            self.command(pet.id, action, request)
-                            pet.queue.extend(queue)
+                        self._next_queued(pet)
                         break
             if pet.attachment:
                 self._contact(pet, self.surfaces[pet.attachment["surfaceId"]])

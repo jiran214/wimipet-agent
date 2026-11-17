@@ -9,6 +9,7 @@ import ctypes as C
 from ctypes import wintypes as W
 from pathlib import Path
 import sys
+import time
 import tkinter as tk
 from types import SimpleNamespace
 
@@ -30,7 +31,7 @@ def main():
     app = Playground(root)
     try:
         assert len(app.world.pets) == 3
-        assert len(app.photos) == 63
+        assert sum(len(a.frames) for p in app.world.pets.values() for a in p.package.actions.values()) == 63
         pet_id = next(iter(app.world.pets))
         app.pet_choice.set(pet_id)
         app.action_choice.set("wave")
@@ -58,6 +59,10 @@ def main():
         app.pause.set(False)
         app.capture_policy()
         app.capture()
+        deadline = time.monotonic() + 5
+        while not app.preview_windows and time.monotonic() < deadline:
+            app.api.poll()
+            root.update_idletasks()
         assert len(app.preview_windows) == 1
         app.reset()
         assert len(app.world.pets) == 3
@@ -80,8 +85,23 @@ def main():
         assert len(app.world.pets) == 2
         assert any(e.get("requestId") == "render-failure" and e.get("status") == "failed" for e in app.results)
         app.reset()
+        app.load_common()
+        one = app.pet_choice.get()
+        app.load_common()
+        two = app.pet_choice.get()
+        assert one != two
+        assert app.world.pets[one].package.id == app.world.pets[two].package.id == "contract-sample-moss"
+        app.action_choice.set("wave")
+        app.action()
+        app.api.tick(700)
+        assert any(e["type"] == "ActionResult" and e["payload"]["instanceId"] == two and e["payload"]["status"] == "completed" for e in app.public_events)
+        app.attach("hanging")
+        assert app.world.pets[two].state == "standing"
+        assert "unsupported-capability" in app.status.get()
+        app._render()
+        app.reset()
         assert not errors, errors
-        print("PASS GUI: 3 samples, PNG decoding, drag interruption, attach/move/minimize, capture pause/preview, reset, full fixed replay")
+        print("PASS GUI: unified samples, PNG decoding, drag interruption, attach/move/minimize, async capture pause/preview, reset, fixed replay; common v1 Tk decode, two instances, wave completion, missing-posture rejection")
         if args.win32:
             desktop = WindowsDesktop()
             assert desktop.bounds().width > 0
@@ -100,6 +120,13 @@ def main():
             desktop.shape(window, photo)
             hwnd = desktop.user.GetAncestor(window.winfo_id(), 2)
             assert desktop.get_style(hwnd, -20) & 0x08000000
+            info = desktop.display_info(20, 20)
+            assert info["scaleFactor"] > 0 and info["displayId"]
+            excluded = desktop.register_host("hidden-test", window)
+            assert desktop.target_ready("hidden-test") == excluded
+            print(f"WIN32 host exclusion property acknowledged: {excluded}; pixel-level exclusion remains unverified")
+            desktop.unregister_host("hidden-test")
+            assert not desktop.target_ready("hidden-test")
             desktop.user.GetWindowRgn.argtypes = [W.HWND, W.HANDLE]
             desktop.gdi.PtInRegion.argtypes = [W.HANDLE, C.c_int, C.c_int]
             region = desktop.gdi.CreateRectRgn(0, 0, 0, 0)
@@ -130,6 +157,7 @@ def main():
                 desktop.gdi.DeleteDC(memory)
                 desktop.user.ReleaseDC(None, screen)
             app.native = desktop
+            app.api._target_ready = desktop.target_ready
             for pet in app.world.pets.values():
                 pet.visible = False
             app._render_overlays()
@@ -141,9 +169,9 @@ def main():
             print("NOT CHECKED: real desktop screenshot, visible overlay drag/layering, click-through to another app, multi-monitor / mixed DPI")
     finally:
         app.close()
-    assert app.world.disposed and app.gate.disposed
+    assert app.world.disposed and app.api._closed
     assert not app.photos and not app.overlays
-    print("PASS cleanup: timers, world, capture gate, image cache, Tk windows released")
+    print("PASS cleanup: timers, world, facade, capture requests, image cache, Tk windows released")
 
 
 if __name__ == "__main__":
