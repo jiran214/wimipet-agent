@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>角色制作台 · WIMIPET</title>
+    <link rel="stylesheet" href="/demo/style.css" />
+  </head>
+  <body>
+    <header>
+      <a href="/" class="brand"
+        >wimi<span>pet</span> <small>角色制作台</small></a
+      ><span class="edition">LOCAL ATELIER / 001</span
+      ><button id="restore">恢复样例副本</button
+      ><button id="feedback">导出体验记录</button>
+    </header>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">CHARACTER STUDIO · B</p>
+          <h1>让一个想象，<br />有自己的样子。</h1>
+          <p>从人设到连续动作，在这里慢慢打磨。</p>
+        </div>
+        <aside>
+          <b id="mode-banner">固定素材体验 · 不调用模型</b>
+          <p>
+            共同样例来自 a24c406，包含原创固定 idle / wave
+            PNG，画风差异只用于协议验证。
+            模拟生成只复用固定帧。真实生成适配器及视觉质量尚未验证。
+          </p>
+          <details>
+            <summary>第一次使用：七步体验</summary>
+            <p>
+              新建角色 → 编辑并保存 → 导入固定动作 → 预览 / 调整 → 确认版本 →
+              导出角色包 →
+              重新导入。可随时回放，恢复样例会新建副本，保留原项目。
+            </p>
+          </details>
+        </aside>
+      </section>
+      <div id="notice" role="status" aria-live="polite">正在载入本地素材…</div>
+      <section class="workspace">
+        <aside class="panel profile">
+          <div class="section-title">
+            <h2><i>01</i> 角色档案</h2>
+            <button id="new">＋ 新建</button>
+          </div>
+          <label>当前项目<select id="projects"></select></label>
+          <p id="revision" class="muted"></p>
+          <label>角色标识<input id="character-id" readonly /></label
+          ><label>名字<input id="name" /></label
+          ><label>自由人设<textarea id="persona" rows="5"></textarea></label
+          ><label>形象说明<textarea id="appearance" rows="2"></textarea></label>
+          <div class="reference">
+            <img id="reference" alt="角色参考图" />
+            <div>
+              <label class="file-button"
+                >导入参考 PNG<input
+                  type="file"
+                  id="reference-file"
+                  accept="image/png" /></label
+              ><label class="file-button"
+                >导入头像 PNG<input
+                  type="file"
+                  id="avatar-file"
+                  accept="image/png"
+              /></label>
+            </div>
+          </div>
+          <button id="save" class="wide">保存角色草稿</button>
+          <p class="muted">修改保留在草稿；确认后才成为可导出的快照。</p>
+        </aside>
+        <section class="panel stage-panel">
+          <div class="section-title">
+            <h2><i>02</i> 动作放映室</h2>
+            <span id="source" class="tag">固定样例</span>
+          </div>
+          <div class="stage" id="stage">
+            <div class="axis horizontal"></div>
+            <div class="axis vertical"></div>
+            <img id="preview" alt="连续动作预览" /><span
+              id="contact"
+              title="接触点"
+            ></span>
+            <div class="stage-caption">160 × 160 · 透明棋盘 / 中心对齐</div>
+          </div>
+          <div class="transport">
+            <button id="play">暂停</button><button id="replay">从头回放</button
+            ><span id="frame-label"></span
+            ><label
+              >倍率<select id="speed">
+                <option value="1">1×</option>
+                <option value="0.5">0.5×</option>
+                <option value="2">2×</option>
+              </select></label
+            >
+          </div>
+          <input
+            type="range"
+            id="scrub"
+            min="0"
+            max="3"
+            value="0"
+            aria-label="逐帧检查"
+          />
+          <div id="frames" class="frames"></div>
+          <label>草稿动作 / 切换预览<select id="actions"></select></label>
+          <div class="row">
+            <button id="sample">导入固定动作</button
+            ><label class="file-button"
+              >导入 PNG 序列<input
+                type="file"
+                id="frames-file"
+                accept="image/png"
+                multiple
+            /></label>
+          </div>
+          <p class="muted">
+            PNG 按文件名自然排序。导入后先作为候选预览，采用才进入草稿。
+          </p>
+          <div class="section-title">
+            <h3>动作调整</h3>
+            <span id="candidate-label" class="tag">草稿</span>
+          </div>
+          <div class="grid2">
+            <label>动作标识<input id="action-id" value="idle" /></label
+            ><label>名称<input id="action-name" /></label>
+          </div>
+          <label>表达含义<input id="meaning" /></label>
+          <div class="grid2">
+            <label
+              >当前帧时长 ms<input
+                type="number"
+                id="duration"
+                min="16"
+                max="10000" /></label
+            ><label
+              >播放方式<select id="loop">
+                <option value="true">循环</option>
+                <option value="false">单次</option>
+              </select></label
+            ><label
+              >位移语义<select id="motion">
+                <option value="in-place">原地动作</option>
+                <option value="root-motion">包含位移</option>
+              </select></label
+            ><label
+              >每循环步幅 px<input type="number" id="stride" min="0" max="2048"
+            /></label>
+          </div>
+          <div class="grid2">
+            <label
+              >允许状态（逗号分隔）<input
+                id="allowed-states"
+                placeholder="standing,falling,dragging" /></label
+            ><label
+              >优先级 0–100<input type="number" id="priority" min="0" max="100"
+            /></label>
+          </div>
+          <label
+            >接触类型（由创作者确认）<select id="contact-kind">
+              <option value="">尚未确认</option>
+              <option value="feet">feet · 脚底</option>
+              <option value="body">body · 身体</option>
+              <option value="top-grip">top-grip · 顶部握持</option>
+              <option value="side-grip">side-grip · 侧面握持</option>
+            </select></label
+          >
+          <p class="muted">
+            状态：standing / lying / clinging / hanging / falling /
+            dragging。只填写素材真实支持的姿态，不以站立素材冒充悬挂。
+          </p>
+          <label
+            >当前帧像素接触点 JSON（相对画布左上角）<textarea
+              id="contacts"
+              rows="2"
+            ></textarea></label
+          ><button id="adjust" class="wide">应用到当前预览</button>
+          <div class="row">
+            <button id="accept" class="primary">采用候选到草稿</button
+            ><button id="discard">放弃候选</button>
+          </div>
+        </section>
+        <aside class="panel delivery">
+          <div class="section-title">
+            <h2><i>03</i> 制作与交付</h2>
+          </div>
+          <label
+            >生成方式<select id="provider">
+              <option value="success">模拟 · 固定成功</option>
+              <option value="failure">模拟 · 固定失败</option>
+              <option value="real">真实适配器 · 未验证</option>
+            </select></label
+          >
+          <p id="config" class="muted"></p>
+          <label
+            >动作描述<textarea id="prompt" rows="3">
+轻轻呼吸，安静等待用户回应</textarea>
+          </label>
+          <div class="row">
+            <button id="generate" class="primary">生成候选 / 重做</button
+            ><button id="cancel">取消</button>
+          </div>
+          <p id="task" role="status">任务：idle</p>
+          <p class="muted">
+            生成不会自动覆盖动作。同名动作仅在采用后替换草稿；确认快照仍保留。
+          </p>
+          <hr />
+          <h3>确认一个可交付的版本</h3>
+          <p class="muted">
+            校验尺寸、帧时长、资源引用、动作标识和接触点。形象一致性与切换观感需要人工检查。
+          </p>
+          <button id="validate" class="wide">检查草稿</button
+          ><button id="confirm" class="wide primary">确认完整角色版本</button
+          ><button id="export" class="wide">导出已确认角色包</button
+          ><label class="file-button wide"
+            >重新导入角色包<input
+              type="file"
+              id="import"
+              accept="application/json,.json"
+          /></label>
+          <p class="muted">
+            导入总是创建独立项目，不覆盖已有角色。公开角色包 已迁移为统一
+            wimipet/1；只导出运行配置通过的确认素材。消费者联调另行验收。
+          </p>
+          <hr />
+          <label
+            >人工体验实际结果 / 问题帧<textarea
+              id="actual"
+              rows="3"
+              placeholder="例如：第 3 帧耳朵未裁切；循环末尾稍快"
+            ></textarea>
+          </label>
+          <p class="muted">
+            体验记录仅含操作类型、模式、版本、预期和你填写的结果；不自动收集人设、图片、密钥或个人截图。
+          </p>
+        </aside>
+      </section>
+    </main>
+    <footer>
+      WIMIPET / CHARACTER ATELIER
+      <span>创作草稿保存在此浏览器 · 请导出备份</span>
+    </footer>
+    <script type="module" src="/demo/app.mjs"></script>
+  </body>
+</html>

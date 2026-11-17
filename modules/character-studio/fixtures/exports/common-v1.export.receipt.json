@@ -1,0 +1,28 @@
+{
+  "protocol": "wimipet/1",
+  "packageId": "contract-sample-moss",
+  "revision": 2,
+  "sourceCommit": "a24c406101262d35a53da7f1f7bd0d9639d19994",
+  "sourceSHA256": "d7d6d9b8d731f37aecc4e436c0d48b9aec0efe464d43aa396872f590f14f9eaf",
+  "exportSHA256": "97c28c971d8e9bd55243b0e0fddf9a765e10c02540e90de72419b440f795189b",
+  "exportBytes": 12908,
+  "actions": [
+    {
+      "actionId": "idle",
+      "allowedStates": [
+        "standing",
+        "falling",
+        "dragging"
+      ],
+      "contactKind": "feet"
+    },
+    {
+      "actionId": "wave",
+      "allowedStates": [
+        "standing"
+      ],
+      "contactKind": "feet"
+    }
+  ],
+  "validation": "B public core real PNG decode and roundtrip; A consumer not run"
+}

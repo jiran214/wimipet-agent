@@ -37,7 +37,8 @@
 
 ## 当前阶段
 
-已有首轮独立实现保存在对应开发 worktree，尚未合并到本工作区；见 [首轮复盘](../../docs/reviews/first-development/README.md)。根契约 v1 为后续迁移目标，当前实现是否支持须单独验证，不因文档更新而宣称兼容。模块运行说明与验证记录以对应实现版本为准。
+已有本模块独立的 Node.js 22 + 原生网页制作台 0.2.0，见 [运行说明](../../docs/character-studio/README.md)。模块目录运行 `npm start` / `npm test` / `npm run export:sample`，没有第三方运行依赖。公开入口按 [B0002](../../docs/PRD/B0002-统一角色包交付.md) 使用根 wimipet/1，映射与固定导出位置见 [入口说明](../../docs/character-studio/CONTRACT.md)。旧格式仅作内部草稿，真实消费者、生图与视觉质量仍须单独验收。
+
 
 ## 职责
 
