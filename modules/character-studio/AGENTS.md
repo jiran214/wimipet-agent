@@ -37,7 +37,7 @@
 
 ## 当前阶段
 
-已有本模块独立的 Node.js 22 + 原生网页制作台，启动、固定样例与验证记录见 [运行说明](../../docs/character-studio/README.md)。使用 `npm start` / `npm test`（在本模块目录执行），没有第三方运行依赖。候选角色包与适配器协议见 [契约说明](../../docs/character-studio/CONTRACT.md)，尚未与其他模块联调。真实生图与视觉质量仍未验证，不将固定素材流程视为效果通过。
+已有本模块独立的 Node.js 22 + 原生网页制作台 0.2.0，见 [运行说明](../../docs/character-studio/README.md)。模块目录运行 `npm start` / `npm test` / `npm run export:sample`，没有第三方运行依赖。公开入口按 [B0002](../../docs/PRD/B0002-统一角色包交付.md) 使用根 wimipet/1，映射与固定导出位置见 [入口说明](../../docs/character-studio/CONTRACT.md)。旧格式仅作内部草稿，真实消费者、生图与视觉质量仍须单独验收。
 
 
 ## 职责

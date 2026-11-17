@@ -11,7 +11,7 @@ import {
   fakeProvider,
   GenerationTask,
   pngSize,
-} from "../src/core.mjs";
+} from "../src/draft-core.mjs";
 const sample = JSON.parse(
   await readFile(
     new URL("../fixtures/sample.character.json", import.meta.url),
@@ -19,7 +19,7 @@ const sample = JSON.parse(
   ),
 );
 const makeProject = () => ({ draft: clone(sample), confirmed: clone(sample) });
-test("固定 PNG 样例尺寸及离线包往返，消费者仅需 JSON 和资源表", () => {
+test("内部历史草稿 PNG 与 JSON 往返（不代表公开运行包）", () => {
   assert.deepEqual(validate(sample), []);
   assert.deepEqual(pngSize(sample.assets.sample_0), [160, 160]);
   const result = parsePackage(JSON.stringify(sample));

@@ -1,14 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { once } from "node:events";
 test("独立服务提供界面、同源配置和固定包；拒绝未配置生图与私有文件", async () => {
-  const port = 14312,
-    base = `http://127.0.0.1:${port}`;
+  let base;
   const server = spawn(process.execPath, ["server.mjs"], {
     cwd: new URL("..", import.meta.url),
     env: {
       ...process.env,
-      PORT: String(port),
+      PORT: "0",
       STUDIO_GENERATOR_URL: "",
       STUDIO_GENERATOR_KEY: "",
     },
@@ -17,8 +17,9 @@ test("独立服务提供界面、同源配置和固定包；拒绝未配置生�
   try {
     await new Promise((resolve, reject) => {
       const timer = setTimeout(() => reject(Error("启动超时")), 5000);
-      server.stdout.once("data", () => {
+      server.stdout.once("data", (data) => {
         clearTimeout(timer);
+        base = data.toString().match(/http:\/\/127\.0\.0\.1:\d+/)[0];
         resolve();
       });
       server.once("exit", () => {
@@ -30,6 +31,9 @@ test("独立服务提供界面、同源配置和固定包；拒绝未配置生�
     assert.match(html, /角色制作台/);
     const config = await fetch(`${base}/api/config`).then((r) => r.json());
     assert.equal(config.realConfigured, false);
+    assert.equal(config.protocol, "wimipet/1");
+    assert.equal(config.module, "B");
+    assert.ok(config.sourceInstanceId);
     assert.ok(!JSON.stringify(config).includes("KEY"));
     assert.equal((await fetch(`${base}/server.mjs`)).status, 404);
     assert.equal(
@@ -52,12 +56,15 @@ test("独立服务提供界面、同源配置和固定包；拒绝未配置生�
       ).status,
       503,
     );
-    const pkg = await fetch(`${base}/fixtures/sample.character.json`).then(
+    const pkg = await fetch(`${base}/fixtures/common-v1.character.json`).then(
       (r) => r.json(),
     );
     assert.equal(pkg.character.name, "苔苔");
   } finally {
-    server.kill();
-    await new Promise((resolve) => server.once("exit", resolve));
+    if (server.exitCode === null) {
+      const stopped = once(server, "exit");
+      server.kill();
+      await stopped;
+    }
   }
 });

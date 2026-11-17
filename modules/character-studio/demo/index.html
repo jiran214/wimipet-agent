@@ -24,8 +24,9 @@
         <aside>
           <b id="mode-banner">固定素材体验 · 不调用模型</b>
           <p>
-            样例 v1 为原创程序绘制的透明
-            PNG。模拟生成只复用固定帧。真实生成适配器及视觉质量尚未验证。
+            共同样例来自 a24c406，包含原创固定 idle / wave
+            PNG，画风差异只用于协议验证。
+            模拟生成只复用固定帧。真实生成适配器及视觉质量尚未验证。
           </p>
           <details>
             <summary>第一次使用：七步体验</summary>
@@ -47,13 +48,8 @@
           <label>当前项目<select id="projects"></select></label>
           <p id="revision" class="muted"></p>
           <label>角色标识<input id="character-id" readonly /></label
-          ><label>名字<input id="name" maxlength="100" /></label
-          ><label
-            >自由人设<textarea
-              id="persona"
-              rows="5"
-              maxlength="20000"
-            ></textarea></label
+          ><label>名字<input id="name" /></label
+          ><label>自由人设<textarea id="persona" rows="5"></textarea></label
           ><label>形象说明<textarea id="appearance" rows="2"></textarea></label>
           <div class="reference">
             <img id="reference" alt="角色参考图" />
@@ -152,8 +148,30 @@
               >每循环步幅 px<input type="number" id="stride" min="0" max="2048"
             /></label>
           </div>
+          <div class="grid2">
+            <label
+              >允许状态（逗号分隔）<input
+                id="allowed-states"
+                placeholder="standing,falling,dragging" /></label
+            ><label
+              >优先级 0–100<input type="number" id="priority" min="0" max="100"
+            /></label>
+          </div>
           <label
-            >接触点 JSON（坐标 0–1；相对整张画布）<textarea
+            >接触类型（由创作者确认）<select id="contact-kind">
+              <option value="">尚未确认</option>
+              <option value="feet">feet · 脚底</option>
+              <option value="body">body · 身体</option>
+              <option value="top-grip">top-grip · 顶部握持</option>
+              <option value="side-grip">side-grip · 侧面握持</option>
+            </select></label
+          >
+          <p class="muted">
+            状态：standing / lying / clinging / hanging / falling /
+            dragging。只填写素材真实支持的姿态，不以站立素材冒充悬挂。
+          </p>
+          <label
+            >当前帧像素接触点 JSON（相对画布左上角）<textarea
               id="contacts"
               rows="2"
             ></textarea></label
@@ -202,8 +220,8 @@
               accept="application/json,.json"
           /></label>
           <p class="muted">
-            导入总是创建独立项目，不覆盖已有角色。角色包协议 0.1 为 B
-            模块候选，尚待跨模块联调。
+            导入总是创建独立项目，不覆盖已有角色。公开角色包 已迁移为统一
+            wimipet/1；只导出运行配置通过的确认素材。消费者联调另行验收。
           </p>
           <hr />
           <label

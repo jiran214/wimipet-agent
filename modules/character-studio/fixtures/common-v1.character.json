@@ -1,0 +1,171 @@
+{
+  "protocol": "wimipet/1",
+  "packageId": "contract-sample-moss",
+  "revision": 1,
+  "character": {
+    "name": "苔苔",
+    "persona": "住在窗口边缘的小小观察家。语气温和，喜欢用植物比喻事物。是否知道自己是 AI，由创作者自由决定。",
+    "appearance": "首轮原创样例组合，仅验证协议，不用于生成质量评审",
+    "avatarAssetId": "sample_0"
+  },
+  "assets": {
+    "sample_0": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEz0lEQVR4nO2ZMY4UMRBF92BcgAtwHMQVIOM8pOQkxCScgAg0wUho1N0u2+X65a73JEe7s+vv/7bcM/v2BgAAAAAAAAAAAAAAAAAAAAAAIOfdh/d/1XuAYjykO1vqvZWkysFfiYeIwVQ7/B757nwOcioWMCLf3c4gBRULaOX7/f3z7c8gBRWnwJV0Z+tuZ5CCqlOgV74rCdVZtqXqFBiVDwmdqToFEDABVUvoyf3jy8fb5U9B5RJ6cj+XNb862zZYBWyVsJuAI7nvlD8NK0tQZ7tiNPdd8qfAMgV6SthpCiBgAqqWMHP9cg07goBjuXfPn4LZ63fnaxgBE1C5hMrZ01C1BI/nP54DJ6lcgiX3TPbsf4ApQEAElFK5hMrZ01C5hMrZ01C5hMrZ01C5BK9n310/BUhB5RIq//GloXIJlbOnoXIJlbOnoWoJr3uKyp4lfwqql2DJPZv9Nb86czp2LcHj51Sd/qnIWMLRxBxdu2UvR4YSPIXrETJD9vKoSoiUzroQUICiBC9ZogRs5bc++yLgAYoSZkToXQiYnCwCeko3ug8EFKAUMEK6nj21XtObGwENKEpQine1N8v39+RGQAMjcoyWoJattUfr91pzvwqo7jotoxJ6F3u3xfQzkvmK3HkhoBEEREA5CLhWQHW/6WEKrpMPAQ0gIALKQcA1Aqp73QamoL98CNgBAvoLqO50O5DQTz4EHAQBkU8KUxAB5SAh8slBQgSU8XqgCNgnIBJOgnzzEqo73Bamn4+ASDgI8vlJqO5yO5h+vgIiYSfI5y+hutNtYPqtERAJjSDfOgnV3W4BAiKgDK7ftQIiYQPkWy+huuPUICACSokSMJvcq7MioIFI+TJN2OjMSHhChIDZ3uRE7QcBDSAgAkpBQASUsrqIo7KVEkbuBwENMAGZgFIQEAGlICACSokSI4t8kftBwAbRUymLfJH7QcIGma7Guy3kM4CACChlVMCfXz/Jiv3z65vk9/ZmRkADVgEfh99a3pKdrcc+r77uKdxMZgQ00BLQUoKXiFdSPcV7Xa3XrBLPkhkBDWQQsCXRmXxWCXtFRMBArgQcKaJHQos4Lfl6JLSI6JkZAQ2oJqBVGK8JuFpCJuAgCgF7hZl5BhyREAGDsbwTVk2+MxE9fo7HJDx7LfJ1MPJZ4Ko3G9GrZ/89mRGwg4j/hqhF85IQARdw9GxVRb4VEh6dp7rj9CAg00/KKgHVYikkRMABVl3DaqmiBeT6ncBbQLVQCgmRbwLvKaiWKVpApp8DCMj0k+I5BdUyRQrI9HMEAZl+UjymoFqkSAmZfgvwmIJqkaImIPItoOoUZPolYlZCtUyrBUS+AGYkVMu0UkDkCwIBEVBOFQmRLzGjEqql8hYQ+YTcWULk24QRCdVyeQiIfEk4KmJ3CUfkQ0AhZ4W0RFSL1ivfVU51BzA4DdXCzcqnPnN44UrCMxnV4h3J9/9ekW8Trq4o64oSzmOv6vMGJ+miZFy5V3UPJVlZqLeEEXtV91GGiDK9RFTsVd3P7UFABJShKPS5rj7K6f3cDgk3RlnsmZjqPSBfIOqCsy91P2VQF51tqfsoyepC1VIh30aoihx5HdIVZKfSdtorAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAo/wD2HoS4F4PuDQAAAABJRU5ErkJggg==",
+      "width": 160,
+      "height": 160
+    },
+    "sample_1": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAE0ElEQVR4nO2ZMXIUMRBFfTAuwAU4DsUVIOM8pOQkxCScwBHUBq5ybc2MWlKrf2v6vSpF9tr6+s+t2fXLCwAAAAAAAAAAAAAAAAAAvOfDp4//1HuAYjykO1vqvZWkysFfiYeIwVQ7/B757nwOcioWMCLf3c4gBRULaOX7+/Pr7c8gBRWnwJV0Z+tuZ5CCqlOgV74rCdVZtqXqFBiVDwmdqToFEDABVUvoyf3r2+fb5U9B5RJ6cr8ta351tm2wCtgqYTcBR3LfKX8aVpagznbFaO675E+BZQr0lLDTFEDABFQtYeb65Rp2BAHHcu+ePwWz1+/O1zACJqByCZWzp6FqCR7PfzwHTlK5BEvumezZ/wBTgIAIKKVyCZWzp6FyCZWzp6FyCZWzp6FyCV7Pvrt+CpCCyiVU/uNLQ+USKmdPQ+USKmdPQ9USnvcUlT1L/hRUL8GSezb7c3515nTsWoLHz6k6/VORsYSjiTm6dstejgwleArXI2SG7OVRlRApnXUhoABFCV6yRAnYym999kXAAxQlzIjQuxAwOVkE9JRudB8IKEApYIR0PXtqvaY3NwIaUJSgFO9qb5bv78mNgAZG5BgtQS1ba4/W77XmfhZQ3XVaRiX0LvZui+lnJPMVufNCQCMIiIByEHCtgOp+08MUXCcfAhpAQASUg4BrBFT3ug1MQX/5ELADBPQXUN3pdiChn3wIOAgCIp8UpiACykFC5JODhAgo4/lAEbBPQCScBPnmJVR3uC1MPx8BkXAQ5POTUN3ldjD9fAVEwk6Qz19CdafbwPRbIyASGkG+dRKqu90CBERAGVy/awVEwgbIt15CdcepQUAElBIlYDa5V2dFQAOR8mWasNGZkfCECAGzvcmJ2g8CGkBABJSCgAgoZXURR2UrJYzcDwIaYAIyAaUgIAJKQUAElBIlRhb5IveDgA2ip1IW+SL3g4QNMl2Nd1vIZwABEVDKqIC/v3+RFfv654fk9/ZmRkADVgEfh99a3pKdrcc+r77uKdxMZgQ00BLQUoKXiFdSvYn3vFqvWSWeJTMCGsggYEuiM/msEvaKiICBXAk4UkSPhBZxWvL1SGgR0TMzAhpQTUCrMF4TcLWETMBBFAL2CjPzDDgiIQIGY3knrJp8ZyJ6/ByPSXj2WuTrYOSzwFVvNqJXz/57MiNgBxH/DVGL5iUhAi7g6NmqinwrJDw6T3XH6UFApp+UVQKqxVJIiIADrLqG1VJFC8j1O4G3gGqhFBIi3wTeU1AtU7SATD8HEJDpJ8VzCqplihSQ6ecIAjL9pHhMQbVIkRIy/RbgMQXVIkVNQORbQNUpyPRLxKyEaplWC4h8AcxIqJZppYDIFwQCIqCcKhIiX2JGJVRL5S0g8gm5s4TItwkjEqrl8hAQ+ZJwVMTuEo7Ih4BCzgppiagWrVe+q5zqDmBwGqqFm5VPfebwxJWEZzKqxTuS7/1ekW8Trq4o64oSzmOv6vMGJ+miZFy5V3UPJVlZqLeEEXtV91GGiDK9RFTsVd3P7UFABJShKPRtXX2U0/u5HRJujLLYMzHVe0C+QNQFZ1/qfsqgLjrbUvdRktWFqqVCvo1QFTnyOqQryE6l7bRXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC4P/8BGz2EuJSjqQYAAAAASUVORK5CYII=",
+      "width": 160,
+      "height": 160
+    },
+    "sample_2": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEu0lEQVR4nO3ZMa7UShBG4bswNsAGWA5iC5CxHlJyEmISVkAEmmAkNLLd1d3V9Ve7zpEcPS7P5fpoD8PbGxERERERERERERERERERERERkbx3H97/Vd8DFeuB7uxS31vJqjz4K3hADK7aw+/Bd+fnIK/iAkbw3e0ZpKjiAlrz/f7++fbPIEUVT4ErdGfX3Z5BiqqeAr34rhCqZ9m2qqfAKD4QOlf1FABggqouoWfuH18+3m7+FFVeQs/cz8s6v3q2bbICbC1hN4Ajc99p/jStXIJ6tqtG577L/CmynAI9S9jpFABggqouYeb1y2vYMQCOzb37/Cmaff3u/BoGYIIqL6Hy7GmqugSPz398Dpys8hIsc8/Mnv0PYIoACEBplZdQefY0VV5C5dnTVHkJlWdPU+UleH323fVbgBRVXkLlP3xpqryEyrOnqfISKs+epqpLeL2nqNmzzJ+i6kuwzD07++v86pnTtesSPH6fqqd/qjIu4ejEHL12m71cGZbgCa4HZIbZy6daQiQ66wVAQYoleGGJAtia3/rZF4AHKZYwA6H3AmDysgD0RDd6HwAUpAQYga7nnlo/0zs3AA0plqCEd3Vvll/fMzcADY3gGF2CGlvrHq2/1jr3K0D1rtM2itB7sXe7OP2MZX5F7nwB0BgAASgPgGsBqvebPk7BdfgAaAiAAJQHwDUA1XvdJk5Bf3wA7AiA/gDVO90uEPrhA+BgAASfNE5BAMoDIfjkgRCAsl4fKAD7AIJwMvDNI1TvcNs4/XwAgnAw8PkhVO9yuzj9fAGCsDPw+SNU73SbOP3WAAShMfCtQ6je7RYBEICyeP2uBQjCRuBbj1C949QBEIDSAAhAWeADoTQAAlAaAAEoLRJgNuAR8wKw0WqAR9+JKU/byPsBoCFOwDjs6l2nLMOpdNcLgIYACEBpAASgLPCBUB4IwScNgACUNgrw59dPssX++fVN8v/tnRmAhqwAHw+/dXkjO7se93n13z3BzcwMQEMtgJYleEG8QvWE93q1fmYVPMvMADSUAWAL0Rk+K8JeiAAM7ArgyCJ6EFrgtPD1ILRA9JwZgIZUJ6AVjNcJuBohJ+BgCoC9YGY+A44gBGBwlr8Jq06+M4gev4/HSXj2s+DraOS7wFV/2Yi+eu6/Z2YAdhTxryFqaF4IAbigo89WVfCtQHj0PNU7Th8AOf2krQKohqVACMCBVr2G1aiiAfL6ncgboBqUAiH4JvI+BdWYogFy+jkEQE4/aZ6noBpTJEBOP8cAyOknzeMUVEOKRMjptyCPU1ANKeoEBN+Cqp6CnH6JmkWoxrQaIPgCmkGoxrQSIPiCAiAA5VVBCL7EjSJUo/IGCD5hd0YIvk0aQajG5QEQfEk6WsTuCEfwAVDY2UJaENXQevFdzaneAQ2ehmpws/jUz5xeukJ4hlEN7wjf//cKvk26ekVZryhwHveqft7khC4K48p7Ve+hZCsX6o0w4l7V+yhTxDK9ICruVb2f2wdAAMpSLPR5XX2V0/u9HQg3TrnYM5jqewBfYOoFZ7/U+ymTetHZLvU+SrZ6oWpU4Nso1SJHfg50BdtpaTvdKxERERERERERERERERERERERERERERERERFRaP8AW5XrYERdKJkAAAAASUVORK5CYII=",
+      "width": 160,
+      "height": 160
+    },
+    "sample_3": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEzklEQVR4nO2ZMY4UMRBF92BcgAtwHMQVIOM8pOQkxCScgAg0wUho1N0u2+X65a73JEe7s+vv/7bcM/v2BgAAAAAAAAAAAAAAAAAAAAAAAAAAMt59eP9XvQcoxkO6s6XeW0mqHPyVeIgYTLXD75Hvzucgp2IBI/Ld7QxSULGAVr7f3z/f/gxSUHEKXEl3tu52BimoOgV65buSUJ1lW6pOgVH5kNCZqlMAARNQtYSe3D++fLxd/hRULqEn93NZ86uzbYNVwFYJuwk4kvtO+dOwsgR1titGc98lfwosU6CnhJ2mAAImoGoJM9cv17AjCDiWe/f8KZi9fne+hhEwAZVLqJw9DVVL8Hj+4zlwksolWHLPZM/+B5gCBERAKZVLqJw9DZVLqJw9DZVLqJw9DZVL8Hr23fVTgBRULqHyH18aKpdQOXsaKpdQOXsaqpbwuqeo7Fnyp6B6CZbcs9lf86szp2PXEjx+TtXpn4qMJRxNzNG1W/ZyZCjBU7geITNkL4+qhEjprAsBBShK8JIlSsBWfuuzLwIeoChhRoTehYDJySKgp3Sj+0BAAUoBI6Tr2VPrNb25EdCAogSleFd7s3x/T24ENDAix2gJatlae7R+rzX3q4DqrtMyKqF3sXdbTD8jma/InRcCGkFABJSDgGsFVPebHqbgOvkQ0AACIqAcBFwjoLrXbWAK+suHgB0goL+A6k63Awn95EPAQRAQ+aQwBRFQDhIinxwkREAZrweKgH0CIuEkyDcvobrDbWH6+QiIhIMgn5+E6i63g+nnKyASdoJ8/hKqO90Gpt8aAZHQCPKtk1Dd7RYgIALK4PpdKyASNkC+9RKqO04NAiKglCgBs8m9OisCGoiUL9OEjc6MhCdECJjtTU7UfhDQAAIioBQEREApq4s4KlspYeR+ENAAE5AJKAUBEVAKAiKglCgxssgXuR8EbBA9lbLIF7kfJGyQ6Wq820I+AwiIgFJGBfz59ZOs2D+/vkl+b29mBDRgFfBx+K3lLdnZeuzz6uuews1kRkADLQEtJXiJeCXVU7zX1XrNKvEsmRHQQAYBWxKdyWeVsFdEBAzkSsCRInoktIjTkq9HQouInpkR0IBqAlqF8ZqAqyVkAg6iELBXmJlnwBEJETAYyzth1eQ7E9Hj53hMwrPXIl8HI58FrnqzEb169t+TGQE7iPhviFo0LwkRcAFHz1ZV5Fsh4dF5qjtODwIy/aSsElAtlkJCBBxg1TWslipaQK7fCbwFVAulkBD5JvCegmqZogVk+jmAgEw/KZ5TUC1TpIBMP0cQkOknxWMKqkWKlJDptwCPKagWKWoCIt8Cqk5Bpl8iZiVUy7RaQOQLYEZCtUwrBUS+IBAQAeVUkRD5EjMqoVoqbwGRT8idJUS+TRiRUC2Xh4DIl4SjInaXcEQ+BBRyVkhLRLVovfJd5VR3AIPTUC3crHzqM4cXriQ8k1Et3pF8/+8V+Tbh6oqyrijhPPaqPm9wki5KxpV7VfdQkpWFeksYsVd1H2WIKNNLRMVe1f3cHgREQBmKQp/r6qOc3s/tkHBjlMWeianeA/IFoi44+1L3UwZ10dmWuo+SrC5ULRXybYSqyJHXIV1Bdiptp70CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICEfzLIhLj20cTWAAAAAElFTkSuQmCC",
+      "width": 160,
+      "height": 160
+    },
+    "wave_0": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABT0lEQVR4nO2XUQ7CIBBEexzvoQfz2wt5PA0fGGK0LTC7M8BOQvxpl3kvVO22RSIRRO7Px2vGvQ6TynyvGfZqLmRVzHMvyVJyAvYKoYt57iVZSk7AmUKoYp57SZYKASFgcgFH10wjoOae8l45AS0gnmtpCS7wowgwFcIG3RPgcjLYoPTHgw1Dl8AGoQsICSFgcQFsiBDAlMAuTz8BbIAQwBRQs9HldoWVRs5yEZAK54WAR83qgg8BJwWUhXuLI2d1w58VoHgCIPAjCoCB18CXxXvhe2dBBbRIYC44fAgIAXgByO+JoQQgf9+HE/AL3kKCiQBLCUPAowSUItBHfygBVstUgLoEc/gQICzBDT4ECEpwh1eSQINXkMBm/2Rp+Jyl4XOWhk9J/+/TpxV4nk/P3mst4nW3Zb4seI0IxHxZEb/m/HumZcGPYl1EBjQSmSNvG3aVZpfO/KcAAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "wave_1": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABO0lEQVR4nO2XUQoCMQxE9zjeQw/mtxfyeEqFhVXWraaTZtrMQP8kmfdokV0WRVEUQK7322PGXdWUMp9nhl3mQl7Feu6iLEUn4KgQuljPXZSl6AT8UghVrOcuylLWXa5CmAV0uRmsAro9jxEFQCUgl9Z+QyfAuhgJMqQEliMBEpBcAERCNIBuQLSAkSVIQGYBqeHTCxB8JgFrTyj4aALC4U+XMwzIMitUQCm8HgS8ZZYERAnYFm6V0DIrTED6GzCtAEvxVvjWWeESIg8cXgIcBCCfyVACkH+VwwnYg/eQQCtg6BuAlLCKQIO7wqMFeB0J8E40YCi8BBBL6AbPKKE7PJOEMHgJIJAQzf6WtODbpIYv8fzGL6fMj2Z85eizFvG5a5lPC/6PCMR8WhF7c769aVrwWryL0IAqyhx5Ari8Sybb0W29AAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    },
+    "wave_2": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABSUlEQVR4nO2XSw7CMAxEexzuAQdjzYU4HiiLoKrqhyRjj5PMSBEbZM97LahdFkVREHm+X58Rd10mldmeEXZVF7IqVrrLRU5EAW53yVkh9OJ/d3lekHACPPsUFfLcJQFeEiRAAnALr74zjIDasmgBzRIsCnmexmvfvwQJkICJBUDgJaBTATD4qBLOesHhIwrYgpqB9yJgOnhXCWxIqgA2IF0CG04CmAJKStwedxhQzSyqgFQ4HwR8zSwJYAlYF26V0DKLJmD6O2BYATXFW+FbZ9ElMA8cXgIkAC8A+T/RlQDks0J3AvbgLSSYCLCU0AU8SsBaBPrW70qA1TEVEF2CObwEBJbgBi8BASW4w0eSQIOPIIHN/svU8DlTw+dMDZ+Snu/TpxV4nk/P2Wst4nW3Zn5Y8BIRiPlhRezNOfpNhwW/inWRMKCKMka+2NzPJgTqjB8AAAAASUVORK5CYII=",
+      "width": 64,
+      "height": 64
+    },
+    "wave_3": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABM0lEQVR4nO2XwQ3CMBRDOw57wGCcWYjxQEFCKlVp2tQ/dhJbyo3++D1SUKbJcRwHkPvz8epxr2xSmeXqYa/iQlHFau4lWUpOwFYhdLGae0mWkhOwpxCqWM29JEtZgAVYQN8Ccp+RE3Ck0LxYyXOle0lKqA0fKoMNevSkDSOg2qvBhqFLYINYgCVYgAVQBbAh6BLYAIa3AAvgCGCX97ffkoDL7Qorjph1Gn6vgFR2uc6AI2ZB4PcKUDoBMPASAew1NLwlRMBbQIAA5A9lUwKQf5XNCViDj5AgK6DpE4CU8BWBBg+FRwuIWhYQHTYgFd4ChCVUg1eUUB1eSQIN3gIEJLDZfzIs+DxDw6dE3vHTSvPZjJ9sXWsR192S+bLgR0Qg5suKWJvz752WBc8luogMqOP0kTcrbTuWplQWtgAAAABJRU5ErkJggg==",
+      "width": 64,
+      "height": 64
+    },
+    "wave_4": {
+      "mime": "image/png",
+      "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABRElEQVR4nO2XQQ7CMAwE+xz+AQ/jzId4HiiHoAqVljhre9PsShEXZO+MUlSWRVEURO7Px+uMuw5TynyfM+wyF/IqFrmLshSdgL1C6GKRuyhL0Qn4pxCqWOQuylISYNzlKoRZQMjNQAo4+k7LrrDHw7LYWholACYBWSj6QARIggRIgARkQ6RLyAZIvwEjS5AACRC8BAh+NgEw+FEE1J5Q8Fb4y+0KA7LMgsO3CCiF60HAW2ZJQJaAdeFeCT2z0gRMfwNOK8BSvBe+d1a6hMwDh5cACcALQP5ODCUA+a4wnIAteA8JLgI8JQwBjxKwFoG++kMJ8DquAtgluMNLALGEMHgJIJQQDs8kIQ2eQUI2+ydTw9dMDV8zNXxJeb8vn17gdX569v7WIv7uWubTgreIQMynFbE159czTQt+FO8iNKCKco68AXMDwWbZ3JguAAAAAElFTkSuQmCC",
+      "width": 64,
+      "height": 64
+    }
+  },
+  "actions": [
+    {
+      "actionId": "idle",
+      "name": "轻轻呼吸",
+      "meaning": "安静陪伴、等待回应",
+      "loop": true,
+      "allowedStates": [
+        "standing",
+        "falling",
+        "dragging"
+      ],
+      "priority": 0,
+      "motion": "in-place",
+      "contactKind": "feet",
+      "frames": [
+        {
+          "assetId": "sample_0",
+          "durationMs": 220,
+          "contact": {
+            "x": 80.0,
+            "y": 137.6
+          }
+        },
+        {
+          "assetId": "sample_1",
+          "durationMs": 220,
+          "contact": {
+            "x": 80.0,
+            "y": 137.6
+          }
+        },
+        {
+          "assetId": "sample_2",
+          "durationMs": 220,
+          "contact": {
+            "x": 80.0,
+            "y": 137.6
+          }
+        },
+        {
+          "assetId": "sample_3",
+          "durationMs": 220,
+          "contact": {
+            "x": 80.0,
+            "y": 137.6
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "wave",
+      "name": "挥手",
+      "meaning": "向用户或伙伴打招呼",
+      "loop": false,
+      "allowedStates": [
+        "standing"
+      ],
+      "priority": 10,
+      "motion": "in-place",
+      "contactKind": "feet",
+      "frames": [
+        {
+          "assetId": "wave_0",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave_1",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave_2",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave_3",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        },
+        {
+          "assetId": "wave_4",
+          "durationMs": 140,
+          "contact": {
+            "x": 32,
+            "y": 60
+          }
+        }
+      ]
+    }
+  ]
+}
