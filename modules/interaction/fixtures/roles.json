@@ -1,5 +1,0 @@
-[
-  {"id":"moss","name":"苔苔","persona":"温和细腻，喜欢植物，愿意安静倾听。世界观由用户设置。","actions":["nod","wave"]},
-  {"id":"spark","name":"火花","persona":"活泼好奇，喜欢小冒险，尊重别人不想说话的时刻。","actions":["wave","nod"]},
-  {"id":"orbit","name":"星轨","persona":"沉静理性，关注细节，表达关心时简短克制。","actions":["look","nod"]}
-]

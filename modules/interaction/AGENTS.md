@@ -39,7 +39,7 @@
 
 ## 当前阶段
 
-已提供 Python 标准库互动核心与本地实验室。运行、测试和实际验证范围见 [运行与验收](../../docs/interaction/运行与验收.md) 与 [验证记录](../../docs/interaction/验证记录.md)。首轮结果见 [首轮复盘](../../docs/reviews/first-development/README.md)。根契约 wimipet/1 是本轮迁移基线，真实消费者联调与真实模型效果必须分别验证，不因规范同步而宣称兼容完成。
+已提供 Python 标准库互动核心与本地实验室。运行、测试和实际验证范围见 [运行与验收](../../docs/interaction/运行与验收.md) 与 [验证记录](../../docs/interaction/验证记录.md)。首轮结果见 [首轮复盘](../../docs/reviews/first-development/README.md)。公开核心已按根契约 wimipet/1 迁移，见 [C0002](../../docs/PRD/C0002-wimipet-v1迁移.md)。真实消费者联调与真实模型效果必须分别验证，不因模块内测试通过而宣称全链路兼容完成。
 
 
 ## 职责
