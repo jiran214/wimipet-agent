@@ -1,0 +1,9 @@
+[project]
+name = "wimipet-interaction"
+version = "0.2.0"
+description = "可独立运行的多角色互动核心与本地实验室"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.interaction]
+protocol = "wimipet/1"
