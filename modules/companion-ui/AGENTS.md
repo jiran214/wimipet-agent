@@ -27,7 +27,7 @@
 
 ## 当前阶段
 
-仅有设计与协作规则，尚无实现、可执行入口和测试命令。下列要求约束后续实现，不代表当前能力已经完成；不要提前锁定语言、框架、模型提供方或进程结构。
+已有模块内原生 JavaScript 核心界面、Node.js 独立体验台与无密钥测试。运行 `npm start --prefix modules/companion-ui`，测试 `npm test --prefix modules/companion-ui`；详见 [使用与验收](../../docs/companion-ui/使用与验收.md) 和 [接口草案](../../docs/companion-ui/接口草案.md)。该选型仅用于 D 当前实现，不锁定其他模块或正式宿主。真实 A/B/C、原生窗口与模型效果尚未联调验证。
 
 ## 职责
 
