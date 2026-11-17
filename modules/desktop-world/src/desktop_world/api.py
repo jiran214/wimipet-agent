@@ -350,6 +350,23 @@ class DesktopWorldAPI:
     def loadCharacter(self, envelope):
         return self.request(envelope)
 
+    def renderFrame(self, instance_id):
+        """宿主读取当前 PNG；不泄漏可变身体对象。"""
+        self._check()
+        self._instance(dict(instanceId=instance_id))
+        return self.world.pets[instance_id].frame.data
+
+    def placeCharacter(self, instance_id, x, y):
+        """宿主以接触点放置角色，动作打断仍由身体规则产生。"""
+        self._check()
+        self._instance(dict(instanceId=instance_id))
+        if not all(isinstance(v, (int, float)) and __import__('math').isfinite(v) for v in (x, y)):
+            raise ProtocolError('invalid-input', '放置坐标无效')
+        self.world.drag_start(instance_id)
+        self.world.drag_move(instance_id, x, y)
+        self.world.drag_end(instance_id)
+        self.world.dock(instance_id)
+
     def applyObservationPolicy(self, envelope):
         return self.request(envelope)
 

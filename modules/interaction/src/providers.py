@@ -3,7 +3,7 @@ import base64
 import json
 import os
 import threading
-import urllib.request
+from openai import OpenAI
 
 
 class FixedModel:
@@ -33,13 +33,18 @@ class FixedModel:
 class OpenAICompatibleModel:
     mode = '真实模型 · 未做效果验收；桌面仍为模拟样例'
 
-    def __init__(self, resolver):
+    def __init__(self, resolver, config=None, client=None):
         self.resolver = resolver
-        self.url = os.environ.get('INTERACTION_MODEL_URL', '').rstrip('/')
-        self.key, self.name = os.environ.get('INTERACTION_API_KEY', ''), os.environ.get('INTERACTION_MODEL', '')
+        config = config if config is not None else os.environ
+        self.url = config.get('OPENAI_BASE_URL') or config.get('INTERACTION_MODEL_URL', '').removesuffix('/chat/completions')
+        self.key = config.get('OPENAI_API_KEY') or config.get('INTERACTION_API_KEY', '')
+        self.name = config.get('OPENAI_MODEL') or config.get('INTERACTION_MODEL', '')
         self.activeRequests, self.lock = 0, threading.Lock()
         if not self.url.startswith('https://') or not self.key or not self.name:
-            raise ValueError('真实模式需要 HTTPS 完整 chat/completions URL、API key 和模型名')
+            raise ValueError('请在本地 .env 配置模型服务地址、密钥和模型名')
+        self.client = client or OpenAI(api_key=self.key, base_url=self.url,
+            timeout=float(config.get('MODEL_TIMEOUT_SECONDS', 60)), max_retries=0)
+        self.mode = '真实 AI 对话'
 
     async def generate(self, role, context, session):
         prompt = ('你是一个陪伴角色。仅依据可见经历，不编造历史或动作执行成功。允许保持安静。'
@@ -60,15 +65,9 @@ class OpenAICompatibleModel:
         with self.lock:
             self.activeRequests += 1
         try:
-            payload = json.dumps(dict(model=self.name, messages=messages, response_format={'type':'json_object'})).encode()
-            request = urllib.request.Request(self.url, data=payload, headers={
-                'Authorization': f'Bearer {self.key}', 'Content-Type': 'application/json'})
-            class NoRedirect(urllib.request.HTTPRedirectHandler):
-                def redirect_request(self, *args, **kwargs):
-                    return None
-            with urllib.request.build_opener(NoRedirect).open(request, timeout=20) as response:
-                result = json.loads(response.read(1_000_000))
-            result = json.loads(result['choices'][0]['message']['content'])
+            completion = self.client.chat.completions.create(model=self.name, messages=messages,
+                response_format={'type': 'json_object'}, max_tokens=1024)
+            result = json.loads(completion.choices[0].message.content)
             if not isinstance(result, dict) or not isinstance(result.get('text', ''), str):
                 raise ValueError('invalid model response')
             return result

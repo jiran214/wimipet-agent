@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.default
+.venv/
+**/__pycache__/
+*.py[cod]
+node_modules/
+**/output/
+**/.playwright-cli/
+*.log
+.runtime/
+dist/
+build/

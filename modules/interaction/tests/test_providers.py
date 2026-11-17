@@ -26,23 +26,18 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
         bridge=MemoryResources()
         item=bridge.put((ROOT/'fixtures/share.png').read_bytes(),'image/png','a.png','session')
         env=dict(INTERACTION_MODEL_URL='https://example.test/v1/chat/completions',INTERACTION_MODEL='test',INTERACTION_API_KEY='test-key')
-        class Response:
-            def __enter__(self):return self
-            def __exit__(self,*args):pass
-            def read(self,limit):return json.dumps({'choices':[{'message':{'content':'{"text":"hello","actionId":null}'}}]}).encode()
-        class Opener:
-            def open(self,request,timeout):
-                self.request,self.timeout=request,timeout
-                return Response()
-        opener=Opener()
-        with patch.dict(os.environ,env),patch('urllib.request.build_opener',return_value=opener):
-            model=OpenAICompatibleModel(bridge)
-            result=await model.generate(dict(instanceId='r',name='角色',persona='custom',supportedActions=[]),[dict(text='',attachments=[item])],'session')
+        from types import SimpleNamespace
+        from unittest.mock import MagicMock
+        client=MagicMock()
+        client.chat.completions.create.return_value=SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content='{"text":"hello","actionId":null}'))])
+        model=OpenAICompatibleModel(bridge,env,client=client)
+        result=await model.generate(dict(instanceId='r',name='角色',persona='custom',supportedActions=[]),[dict(text='',attachments=[item])],'session')
         self.assertEqual(result['text'],'hello')
-        data=json.loads(opener.request.data)
+        data=client.chat.completions.create.call_args.kwargs
+        self.assertEqual(data['model'],'test')
         self.assertIn('custom',data['messages'][0]['content'])
         self.assertTrue(data['messages'][1]['content'][1]['image_url']['url'].startswith('data:image/png;base64,'))
-        self.assertNotIn('test-key',opener.request.data.decode())
+        self.assertNotIn('test-key',json.dumps(data))
         self.assertEqual(model.activeRequests,0)
 
     async def test_resource_lifecycle_and_session_isolation(self):
